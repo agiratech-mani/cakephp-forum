@@ -1,54 +1,59 @@
-<?php
-/**
-  * @var \App\View\AppView $this
-  */
-?>
-<nav class="large-3 medium-4 columns" id="actions-sidebar">
-    <ul class="side-nav">
-        <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('New User'), ['action' => 'add']) ?></li>
-        <li><?= $this->Html->link(__('List Bookmarks'), ['controller' => 'Bookmarks', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New Bookmark'), ['controller' => 'Bookmarks', 'action' => 'add']) ?></li>
-    </ul>
-</nav>
 <div class="users index large-9 medium-8 columns content">
     <h3><?= __('Users') ?></h3>
-    <table cellpadding="0" cellspacing="0">
-        <thead>
-            <tr>
-                <th scope="col"><?= $this->Paginator->sort('id') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('email') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('password') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('created') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('modified') ?></th>
-                <th scope="col" class="actions"><?= __('Actions') ?></th>
+    <hr>
+    <div class="clearfix">
+       <?= $this->Html->link('<i class="fa fa-fw fa-plus"></i> '.__('Add'), ['controller' => 'Users', 'action' => 'add'],['escape' => false,'class'=>'pull-right mar5 btn btn-info btn-m']) ?>
+    </div><?php
+                        $loguser = $this->request->session()->read('Auth.User');
+                    ?>
+    <table class="table">
+        <thead class="thead-inverse">
+            <tr class="thead-inverse">
+                <th><?= $this->Paginator->sort('id','#') ?></th>
+                <th><?= $this->Paginator->sort('first_name','First Name') ?></th>
+                <th><?= $this->Paginator->sort('last_name','Last Name') ?></th>
+                <th><?= $this->Paginator->sort('username','Username') ?></th>
+                <th><?= $this->Paginator->sort('email','Email') ?></th>
+                <th><?= $this->Paginator->sort('role','Role') ?></th>
+                <th><?= $this->Paginator->sort('created','Created') ?></th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
             <?php foreach ($users as $user): ?>
             <tr>
                 <td><?= $this->Number->format($user->id) ?></td>
+                <td><?= h($user->first_name) ?></td>
+                <td><?= h($user->last_name) ?></td>
+                <td><?= h($user->username) ?></td>
                 <td><?= h($user->email) ?></td>
-                <td><?= h($user->password) ?></td>
+                <td><?= h($user->role) ?></td>
                 <td><?= h($user->created) ?></td>
-                <td><?= h($user->modified) ?></td>
                 <td class="actions">
-                    <?= $this->Html->link(__('View'), ['action' => 'view', $user->id]) ?>
-                    <?= $this->Html->link(__('Edit'), ['action' => 'edit', $user->id]) ?>
-                    <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $user->id], ['confirm' => __('Are you sure you want to delete # {0}?', $user->id)]) ?>
+                    <?= $this->Html->link('<i class="fa fa-fw fa-pencil"></i> ', ['action' => 'edit', $user->id],['escape'=>false]) ?>
+                    <?php if($loguser['id'] != $user->id): ?>
+                    <?= $this->Form->postLink('<i class="fa fa-fw fa-remove"></i> ', ['action' => 'delete', $user->id], ['confirm' => __('Are you sure you want to delete # {0}?', $user->username),'escape'=>false]) ?>
+                    <?php endif; ?>
                 </td>
             </tr>
             <?php endforeach; ?>
-        </tbody>
     </table>
-    <div class="paginator">
-        <ul class="pagination">
-            <?= $this->Paginator->first('<< ' . __('first')) ?>
-            <?= $this->Paginator->prev('< ' . __('previous')) ?>
-            <?= $this->Paginator->numbers() ?>
-            <?= $this->Paginator->next(__('next') . ' >') ?>
-            <?= $this->Paginator->last(__('last') . ' >>') ?>
-        </ul>
-        <p><?= $this->Paginator->counter(['format' => __('Page {{page}} of {{pages}}, showing {{current}} record(s) out of {{count}} total')]) ?></p>
+    <div class="clearfix">
+        <div class="paginator pull-right">
+            <div class="clearfix">
+                <div class="pull-left pagination pagination-counter">
+                <p><?= $this->Paginator->counter(['format' => __('Page {{page}} of {{pages}}')]) ?></p>
+                </div>
+                <div class="pull-left">
+                <ul class="pagination">
+                    <?= $this->Paginator->first('<<') ?>
+                    <?= $this->Paginator->prev('<') ?>
+                    <?= $this->Paginator->numbers() ?>
+                    <?= $this->Paginator->next('>') ?>
+                    <?= $this->Paginator->last('>>') ?>
+                </ul>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

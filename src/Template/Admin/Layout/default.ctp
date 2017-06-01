@@ -8,15 +8,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
+    <link rel="icon" href="favicon-transparent.png" type="image/x-icon">
 
     <title>Forum Admin:<?= $this->fetch('title') ?></title>
 
     <!-- Bootstrap Core CSS -->
     <?= $this->Html->css('bootstrap.min.css') ?>
-    <?= $this->Html->css('sb-admin.css') ?>
+    <?= $this->Html->css('admin.css') ?>
     <?= $this->Html->css('plugins/morris.css') ?>
     <?= $this->Html->css('font-awesome/css/font-awesome.min.css') ?>
-
+    <?= $this->Html->css('common.css') ?>
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -53,6 +54,9 @@
                         <li>
                             <?= $this->Html->link('<i class="fa fa-fw fa-user"></i> '.__('Profile'), ['controller' => 'Users', 'action' => 'edit',$loguser['id']],['escape' => false]) ?>
                         </li>
+                        <li>
+                            <?= $this->Html->link('<i class="fa fa-fw fa-user"></i> '.__('Change Password'), ['controller' => 'Users', 'action' => 'change_password'],['escape' => false]) ?>
+                        </li>
                         <li class="divider"></li>
                         <li>
                             <?= $this->Html->link('<i class="fa fa-fw fa-power-off"></i> '.__('Log Out'), ['controller' => 'Users', 'action' => 'logout','prefix'=>false],['escape' => false]) ?>
@@ -63,10 +67,10 @@
             <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
             <div class="collapse navbar-collapse navbar-ex1-collapse">
                 <ul class="nav navbar-nav side-nav">
-                    <li class="active">
+                    <!--<li class="active">
                         <a href="index.html"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
-                    </li>
-                    <li>
+                    </li>-->
+                    <li  class="active">
                         <?= $this->Html->link('<i class="fa fa-fw fa-users"></i> '.__('Users'), ['controller' => 'Users', 'action' => 'index'],['escape' => false]) ?>
                         
                     </li>
@@ -77,22 +81,14 @@
 
         <div id="page-wrapper" class="container">
             <div class="container-fluid">
-                <!-- Page Heading -->
                 <div class="row">
-                    <div class="col-lg-12">
-                        <h1 class="page-header">
-                            <?= $this->fetch('title') ?>
-                        </h1>
-                        
-                    </div>
+                    <?= $this->Flash->render() ?>
                 </div>
-                <!-- /.row -->
                  <div class="row">
                     <?= $this->fetch('content') ?>
                 </div>
             </div>
         </div>
-        <!-- /#page-wrapper -->
 
     </div>
     <!-- /#wrapper -->

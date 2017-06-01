@@ -4,7 +4,9 @@ namespace App\Model\Table;
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
+use Cake\Auth\DefaultPasswordHasher;
 use Cake\Validation\Validator;
+
 
 /**
  * Users Model
@@ -37,12 +39,7 @@ class UsersTable extends Table
         $this->table('users');
         $this->displayField('id');
         $this->primaryKey('id');
-
         $this->addBehavior('Timestamp');
-
-        $this->hasMany('Bookmarks', [
-            'foreignKey' => 'user_id'
-        ]);
     }
 
     /**
@@ -56,22 +53,84 @@ class UsersTable extends Table
         $validator
             ->integer('id')
             ->allowEmpty('id', 'create');
-
+        $validator
+            ->requirePresence('first_name', 'create')
+            ->notEmpty('first_name', 'Please fill this field');
+        $validator
+            ->requirePresence('last_name', 'create')
+            ->notEmpty('last_name', 'Please fill this field');
         $validator
             ->email('email')
             ->requirePresence('email', 'create')
-            ->notEmpty('email');
+            ->notEmpty('email', 'Please fill this field');
         $validator
             ->requirePresence('username', 'create')
-            ->notEmpty('username');
+            ->notEmpty('username', 'Please fill this field')
+            ->add('username', [
+                'length' => [
+                'rule' => ['minLength',8],
+                'message' => 'Username need to be at least 8 characters long',
+                ]
+            ]);
 
         $validator
             ->requirePresence('password', 'create')
-            ->notEmpty('password');
+            ->notEmpty('password', 'Please fill this field')
+            ->add('password', [
+                'length' => [
+                'rule' => ['minLength',8],
+                'message' => 'Password need to be at least 8 characters long',
+                ]
+            ])
+            ->add('password', [
+                    'compare' => [
+                        'rule' => ['compareWith', 'confirm_password'],
+                        'message'=>"Password should match confirm password!"
+                        ]
+                    ]);
+        $validator
+            ->requirePresence('confirm_password', 'create')
+            ->notEmpty('password', 'Please fill this field');
 
         return $validator;
     }
+    public function validationPassword(Validator $validator) 
+    {
+        $validator->add('old_password', 'custom', ['rule' => function($value, $context) {
+            $user = $this->get($context['data']['id']);
+            if ($user) {
+                if ((new DefaultPasswordHasher)->check($value, $user -> password)) {
+                    return true;
+                }
+            }
+            return false;
+        }, 'message' => 'The old password does not match the current password!' ])->notEmpty('old_password');
 
+       $validator
+            ->requirePresence('password', 'create')
+            ->notEmpty('password', 'Please fill this field')
+            ->add('password', [
+                'length' => [
+                'rule' => ['minLength',8],
+                'message' => 'Password need to be at least 8 characters long',
+                ]
+            ]) ->add('password', [
+                    'compare' => [
+                        'rule' => ['compareWith', 'confirm_password'],
+                        'message'=>"Password should match confirm password!"
+                        ]
+                    ]);
+        $validator
+            ->notEmpty('confirm_password', 'Please fill this field')
+            ->add('confirm_password', [
+                'length' => [
+                'rule' => ['minLength',8],
+                'message' => 'Password need to be at least 8 characters long',
+                ]
+            ])
+           ;
+        return $validator;
+    }
     /**
      * Returns a rules checker object that will be used for validating
      * application integrity.
@@ -81,8 +140,10 @@ class UsersTable extends Table
      */
     public function buildRules(RulesChecker $rules)
     {
-        $rules->add($rules->isUnique(['email']));
-
+        $rules->add($rules->isUnique(['email'],'Email already taken by someone.'));
+        $rules->add($rules->isUnique(['username'],'User already exists.'));
+        
         return $rules;
     }
+    
 }

@@ -10,12 +10,11 @@ use App\Controller\AppController;
  */
 class UsersController extends AppController
 {
-
-    /**
-     * Index method
-     *
-     * @return \Cake\Network\Response|null
-     */
+    public function initialize()
+    {
+        parent::initialize();
+        $this->Auth->allow(['logout', 'register']);
+    }
     public function index()
     {
         $users = $this->paginate($this->Users);
@@ -23,54 +22,35 @@ class UsersController extends AppController
         $this->set(compact('users'));
         $this->set('_serialize', ['users']);
     }
-
-    /**
-     * View method
-     *
-     * @param string|null $id User id.
-     * @return \Cake\Network\Response|null
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function view($id = null)
-    {
-        $user = $this->Users->get($id, [
-            'contain' => ['Bookmarks']
-        ]);
-
-        $this->set('user', $user);
-        $this->set('_serialize', ['user']);
-    }
-
-    /**
-     * Add method
-     *
-     * @return \Cake\Network\Response|null Redirects on successful add, renders view otherwise.
-     */
-    public function add()
+    public function register()
     {
         $user = $this->Users->newEntity();
         if ($this->request->is('post')) {
             $user = $this->Users->patchEntity($user, $this->request->data);
             if ($this->Users->save($user)) {
                 $this->Flash->success(__('The user has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect(['action' => 'login']);
             }
             $this->Flash->error(__('The user could not be saved. Please, try again.'));
         }
         $this->set(compact('user'));
         $this->set('_serialize', ['user']);
     }
-
-    /**
-     * Edit method
-     *
-     * @param string|null $id User id.
-     * @return \Cake\Network\Response|null Redirects on successful edit, renders view otherwise.
-     * @throws \Cake\Network\Exception\NotFoundException When record not found.
-     */
-    public function edit($id = null)
+    public function view()
     {
+        $authUser = $this->Auth->user();
+        $id = $authUser['id'];
+        $user = $this->Users->get($id);
+
+        $this->set('user', $user);
+        
+        $this->set('_serialize', ['user']);
+    }
+
+    public function edit()
+    {
+        $authUser = $this->Auth->user();
+        $id = $authUser['id'];
         $user = $this->Users->get($id, [
             'contain' => []
         ]);
@@ -79,56 +59,44 @@ class UsersController extends AppController
             if ($this->Users->save($user)) {
                 $this->Flash->success(__('The user has been saved.'));
 
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect(['action' => 'edit']);
             }
             $this->Flash->error(__('The user could not be saved. Please, try again.'));
         }
+        $this->set('title','Edit Profile');
         $this->set(compact('user'));
         $this->set('_serialize', ['user']);
-    }
-
-    /**
-     * Delete method
-     *
-     * @param string|null $id User id.
-     * @return \Cake\Network\Response|null Redirects to index.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function delete($id = null)
-    {
-        $this->request->allowMethod(['post', 'delete']);
-        $user = $this->Users->get($id);
-        if ($this->Users->delete($user)) {
-            $this->Flash->success(__('The user has been deleted.'));
-        } else {
-            $this->Flash->error(__('The user could not be deleted. Please, try again.'));
-        }
-
-        return $this->redirect(['action' => 'index']);
     }
     public function login()
     {
         if ($this->request->is('post')) {
             $user = $this->Auth->identify();
+            
             if ($user) {
-                $this->Auth->setUser($user);
-                if($user['role'] == 'admin')
+                if($user['active'] == 1)
                 {
-                    return $this->redirect(['action' => 'index','prefix'=>'admin']);
+                    $this->Auth->setUser($user);
+                    if($user['role'] == 'admin')
+                    {
+                        return $this->redirect(['action' => 'index','prefix'=>'admin']);
+                    }
+                    else
+                    {
+                        return $this->redirect($this->Auth->redirectUrl());
+                    }
                 }
                 else
                 {
-                    return $this->redirect($this->Auth->redirectUrl());
+                    $this->Auth->logout();
+                    $this->Flash->error('Your account is inactived please contact admin.');
                 }
-                
             }
-            $this->Flash->error('Your username or password is incorrect.');
+            else
+            {
+                $this->Flash->error('Your username or password is incorrect.');
+            }
+            
         }
-    }
-    public function initialize()
-    {
-        parent::initialize();
-        $this->Auth->allow(['logout', 'add']);
     }
 
     public function logout()
@@ -136,4 +104,35 @@ class UsersController extends AppController
         $this->Flash->success('You are now logged out.');
         return $this->redirect($this->Auth->logout());
     }
+    public function changePassword()
+    {
+        $user = $this->Users->get($this->Auth->user('id'));
+        if (!empty($this->request->data))
+        {
+            $user = $this->Users->patchEntity($user, 
+                [
+                    'old_password' => $this->request->data['old_password'], 
+                    'password' => $this->request->data['password'], 
+                    'password' => $this->request->data['password'], 
+                    'confirm_password' => $this->request->data['confirm_password']
+                ], 
+                [
+                    'validate' => 'password'
+                ]);
+            if ($this->Users->save($user))
+            {
+                $this->Flash->success('The password is successfully changed');
+                $this->redirect('/profile');
+            }
+            else
+            {
+                $this->Flash->error('There was an error during the save!');
+            }
+        }
+        $this->set('title','Change Password');
+        unset($user['password']);
+        $this->set(compact('user'));
+        $this->set('_serialize', ['user']);
+    }
+    
 }

@@ -24,28 +24,6 @@ class UsersController extends AppController
         $this->set('_serialize', ['users']);
     }
 
-    /**
-     * View method
-     *
-     * @param string|null $id User id.
-     * @return \Cake\Network\Response|null
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function view($id = null)
-    {
-        $user = $this->Users->get($id, [
-            'contain' => ['Bookmarks']
-        ]);
-
-        $this->set('user', $user);
-        $this->set('_serialize', ['user']);
-    }
-
-    /**
-     * Add method
-     *
-     * @return \Cake\Network\Response|null Redirects on successful add, renders view otherwise.
-     */
     public function add()
     {
         $user = $this->Users->newEntity();
@@ -61,14 +39,6 @@ class UsersController extends AppController
         $this->set(compact('user'));
         $this->set('_serialize', ['user']);
     }
-
-    /**
-     * Edit method
-     *
-     * @param string|null $id User id.
-     * @return \Cake\Network\Response|null Redirects on successful edit, renders view otherwise.
-     * @throws \Cake\Network\Exception\NotFoundException When record not found.
-     */
     public function edit($id = null)
     {
         $user = $this->Users->get($id, [
@@ -87,13 +57,6 @@ class UsersController extends AppController
         $this->set('_serialize', ['user']);
     }
 
-    /**
-     * Delete method
-     *
-     * @param string|null $id User id.
-     * @return \Cake\Network\Response|null Redirects to index.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
     public function delete($id = null)
     {
         $this->request->allowMethod(['post', 'delete']);
@@ -106,26 +69,34 @@ class UsersController extends AppController
 
         return $this->redirect(['action' => 'index']);
     }
-    public function login()
+    public function changePassword()
     {
-        if ($this->request->is('post')) {
-            $user = $this->Auth->identify();
-            if ($user) {
-                $this->Auth->setUser($user);
-                return $this->redirect($this->Auth->redirectUrl());
+        $user = $this->Users->get($this->Auth->user('id'));
+        if (!empty($this->request->data))
+        {
+            $user = $this->Users->patchEntity($user, 
+                [
+                    'old_password' => $this->request->data['old_password'], 
+                    'password' => $this->request->data['password'], 
+                    'password' => $this->request->data['password'], 
+                    'confirm_password' => $this->request->data['confirm_password']
+                ], 
+                [
+                    'validate' => 'password'
+                ]);
+            if ($this->Users->save($user))
+            {
+                $this->Flash->success('The password is successfully changed');
+                $this->redirect('/profile');
             }
-            $this->Flash->error('Your username or password is incorrect.');
+            else
+            {
+                $this->Flash->error('There was an error during the save!');
+            }
         }
-    }
-    public function initialize()
-    {
-        parent::initialize();
-        $this->Auth->allow(['logout', 'add']);
-    }
-
-    public function logout()
-    {
-        $this->Flash->success('You are now logged out.');
-        return $this->redirect($this->Auth->logout());
+        $this->set('title','Change Password');
+        unset($user['password']);
+        $this->set(compact('user'));
+        $this->set('_serialize', ['user']);
     }
 }

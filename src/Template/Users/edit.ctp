@@ -1,31 +1,41 @@
-<?php
-/**
-  * @var \App\View\AppView $this
-  */
-?>
-<nav class="large-3 medium-4 columns" id="actions-sidebar">
-    <ul class="side-nav">
-        <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Form->postLink(
-                __('Delete'),
-                ['action' => 'delete', $user->id],
-                ['confirm' => __('Are you sure you want to delete # {0}?', $user->id)]
-            )
-        ?></li>
-        <li><?= $this->Html->link(__('List Users'), ['action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('List Bookmarks'), ['controller' => 'Bookmarks', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New Bookmark'), ['controller' => 'Bookmarks', 'action' => 'add']) ?></li>
-    </ul>
-</nav>
-<div class="users form large-9 medium-8 columns content">
-    <?= $this->Form->create($user) ?>
-    <fieldset>
-        <legend><?= __('Edit User') ?></legend>
-        <?php
-            echo $this->Form->input('email');
-            echo $this->Form->input('password');
-        ?>
-    </fieldset>
-    <?= $this->Form->button(__('Submit')) ?>
-    <?= $this->Form->end() ?>
+<h3>
+    <?= $title ?>
+</h3>
+<hr>
+<div class="col-md-6 col-md-offset-3">
+    <div class="login-panel panel panel-default">
+       
+        <div class="panel-body">
+            <?= $this->Form->create($user,['class'=>'form-horizontal','type'=>'POST']) ?>
+                <fieldset>
+                    <div class="form-group ">
+                        <label class="col-sm-4 control-label">Email</label>
+                        <div class="col-sm-8">
+                           <label class="control-label"> <?= $user['email'] ?></label>
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <label class="col-sm-4 control-label">Username</label>
+                        <div class="col-sm-8">
+                            <label class="control-label"> <?= $user['username'] ?></label>
+                        </div>
+                    </div>
+                    <div class="form-group required">
+                        <label class="col-sm-4 control-label">First Name</label>
+                        <div class="col-sm-8">
+                            <?= $this->Form->input('first_name',['class'=>"form-control",'label'=>false]) ?>
+                        </div>
+                    </div>
+                    <div class="form-group required">
+                        <label class="col-sm-4 control-label">Last Name</label>
+                        <div class="col-sm-8">
+                            <?= $this->Form->input('last_name',['class'=>"form-control",'label'=>false]) ?>
+                        </div>
+                    </div>
+                    
+                    <?= $this->Form->button('Submit',['class'=>"btn btn-m btn-success btn-inline  pull-right"]) ?>
+                </fieldset>
+            <?= $this->Form->end() ?>
+        </div>
+    </div>
 </div>

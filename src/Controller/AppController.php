@@ -57,11 +57,11 @@ class AppController extends Controller
                 'action' => 'login',
                 'prefix' => false
             ],
-            'loginRedirect' => [
-                'controller' => 'Users',
-                'action' => 'index',
-                'prefix' => false
-            ],
+            // 'loginRedirect' => [
+            //     'controller' => 'Users',
+            //     'action' => 'index',
+            //     'prefix' => false
+            // ],
             'logoutRedirect' => [
                 'controller' => 'Users',
                 'action' => 'login'
@@ -69,7 +69,14 @@ class AppController extends Controller
             'authorize' => 'Controller',
             'unauthorizedRedirect' => $this->referer() // If unauthorized, return them to page they were just on
         ]);
-
+        if($this->Auth->user('role') == 'admin')
+        {
+            $this->Auth->loginRedirect = array('controller' => 'Users', 'action' => 'index','prefix'=>'admin');
+        }
+        else
+        {
+            $this->Auth->loginRedirect = array('controller' => 'Users', 'action' => 'edit','prefix'=>false);
+        }
         // Allow the display action so our pages controller
         // continues to work.
         $this->Auth->allow(['display']);
@@ -97,22 +104,11 @@ class AppController extends Controller
             }
         }
 
-        // The add and index actions are always allowed.
-        if (in_array($action, ['index', 'add', 'tags'])) {
+        if (in_array($action, ['index', 'add', 'edit','view'])) {
             return true;
         }
-        // All other actions require an id.
-        if (!$this->request->param('pass.0')) {
-            return false;
-        }
-
-        // Check that the bookmark belongs to the current user.
-        $id = $this->request->param('pass.0');
-        // $bookmark = $this->User->get($id);
-        // if ($bookmark->user_id == $user['id']) {
-        //     return true;
-        // }
-       return true;
+        
+        return true;
     }
     /**
      * Before render callback.

@@ -3,11 +3,31 @@
  * Copyright 2013-2016 Start Bootstrap
  * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap/blob/gh-pages/LICENSE)
  */
-
-body {
-    padding-top: 70px; /* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
+html,body{
+    height: 100%
 }
-
-footer {
-    margin: 50px 0;
+body {
+    /*padding-top: 70px;*/
+     /* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
+     height: 100%;
+}
+#homepage .navbar
+{
+    margin-bottom: 0px;
+}
+#homecontent .jumbotron
+{
+    border-radius: 0px;
+    background-color: #6f5499;
+    color:#fff;
+}
+.footer {
+  position: relative;
+  color: #9d9d9d;
+  background-color: #222222;
+} 
+#footer
+{
+   padding-top: 10px;
+   padding-bottom: 10px;
 }

@@ -1,0 +1,23 @@
+.error-message
+{
+    color:red;
+    padding-top:2px;
+}
+.error-message ul
+{
+    list-style: none;
+    padding-left: 0;
+}
+.form-group.required label:after {
+  content:" *";
+  color:red;
+}
+.pagination-counter p
+{
+    margin-top: 8px;
+    margin-right: 10px;
+}
+.mar5
+{
+ margin:5px;
+}

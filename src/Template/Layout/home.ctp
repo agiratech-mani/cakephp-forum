@@ -10,9 +10,9 @@
     <meta name="author" content="">
     <link rel="icon" href="favicon-transparent.png" type="image/x-icon">
     <title>Blog Home - Start Bootstrap Template</title>
-    <?= $this->Html->css('bootstrap.css') ?>
+    <?= $this->Html->css('bootstrap.min.css') ?>
     <?= $this->Html->css('public.css') ?>
-    <?= $this->Html->css('common.css') ?>
+
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -22,21 +22,13 @@
 
 </head>
 
-<body>
-
+<body id="homepage">
     <!-- Navigation -->
     <?= $this->element('public-nav'); ?>
 
     <!-- Page Content -->
-    <div class="container">
-        <div class="row">
-             <?= $this->Flash->render() ?>
-        </div>
-         <?php
-            $loguser = $this->request->session()->read('Auth.User');
-        ?> 
-        <?php if(!empty($loguser)): ?>
-        <?php endif; ?>
+    <div class="container-fluid" id="homecontent">
+        
         <div class="row">
             <?= $this->fetch('content') ?>
         </div>

@@ -41,4 +41,6 @@ return array(
     'Aura\\Intl\\_Config\\' => array($vendorDir . '/aura/intl/config'),
     'App\\Test\\' => array($baseDir . '/tests'),
     'App\\' => array($baseDir . '/src'),
+    'AgiraForum\\Test\\' => array($baseDir . '/plugins/AgiraForum/tests'),
+    'AgiraForum\\' => array($baseDir . '/plugins/AgiraForum/src'),
 );

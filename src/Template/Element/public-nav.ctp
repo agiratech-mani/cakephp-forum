@@ -18,25 +18,28 @@
                     ?> 
                     <?php if(empty($loguser)): ?>
                     <li>
-                        <?= $this->Html->link('<i class="fa fa-fw fa-power-off"></i> '.__('Sign Up'), ['controller' => 'Users', 'action' => 'register','prefix'=>false],['escape' => false]) ?>
+                        <?= $this->Html->link('<i class="fa fa-fw fa-power-off"></i> '.__('Sign Up'), ['controller' => 'Users', 'action' => 'register','prefix'=>false,'plugin'=>false],['escape' => false]) ?>
                     </li>
                     <li>
-                        <?= $this->Html->link('<i class="fa fa-fw fa-power-off"></i> '.__('Log In'), ['controller' => 'Users', 'action' => 'login','prefix'=>false],['escape' => false]) ?>
+                        <?= $this->Html->link('<i class="fa fa-fw fa-power-off"></i> '.__('Log In'), ['controller' => 'Users', 'action' => 'login','prefix'=>false,'plugin'=>false],['escape' => false]) ?>
                     </li>
                    
                     <?php else: ?>
                     <li>
+                        <?= $this->Html->link('<i class="fa fa-fw fa-power-off"></i> '.__('Forum'), ['controller' => 'ForumForums', 'action' => 'index','prefix'=>false,'plugin'=>'AgiraForum'],['escape' => false]) ?>
+                    </li>
+                    <li>
                       <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> <?= $loguser['username'] ?> <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                             <li>
-                                <?= $this->Html->link('<i class="fa fa-fw fa-user"></i> '.__('Profile'), ['controller' => 'Users', 'action' => 'edit',$loguser['id']],['escape' => false]) ?>
+                                <?= $this->Html->link('<i class="fa fa-fw fa-user"></i> '.__('Profile'), ['controller' => 'Users', 'action' => 'edit',$loguser['id'],'plugin'=>false],['escape' => false]) ?>
                             </li>
                              <li>
-                                <?= $this->Html->link('<i class="fa fa-fw fa-user"></i> '.__('Change Password'), ['controller' => 'Users', 'action' => 'change_password',$loguser['id']],['escape' => false]) ?>
+                                <?= $this->Html->link('<i class="fa fa-fw fa-user"></i> '.__('Change Password'), ['controller' => 'Users', 'action' => 'change_password',$loguser['id'],'plugin'=>false],['escape' => false]) ?>
                             </li>
                             <li class="divider"></li>
                             <li>
-                                <?= $this->Html->link('<i class="fa fa-fw fa-power-off"></i> '.__('Log Out'), ['controller' => 'Users', 'action' => 'logout','prefix'=>false],['escape' => false]) ?>
+                                <?= $this->Html->link('<i class="fa fa-fw fa-power-off"></i> '.__('Log Out'), ['controller' => 'Users', 'action' => 'logout','prefix'=>false,'plugin'=>false],['escape' => false]) ?>
                             </li>
                         </ul>
                     </li>

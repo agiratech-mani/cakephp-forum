@@ -10,7 +10,7 @@
     <meta name="author" content="">
     <link rel="icon" href="favicon-transparent.png" type="image/x-icon">
 
-    <title>Forum Admin:<?= $this->fetch('title') ?></title>
+    <title>Forum Admin: <?= $this->fetch('title') ?></title>
 
     <!-- Bootstrap Core CSS -->
     <?= $this->Html->css('bootstrap.min.css') ?>
@@ -52,14 +52,14 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> <?= $loguser['username'] ?> <b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li>
-                            <?= $this->Html->link('<i class="fa fa-fw fa-user"></i> '.__('Profile'), ['controller' => 'Users', 'action' => 'edit',$loguser['id']],['escape' => false]) ?>
+                            <?= $this->Html->link(__('Profile'), ['controller' => 'Users', 'action' => 'edit',$loguser['id'],'plugin'=>false],['escape' => false]) ?>
                         </li>
                         <li>
-                            <?= $this->Html->link('<i class="fa fa-fw fa-user"></i> '.__('Change Password'), ['controller' => 'Users', 'action' => 'change_password'],['escape' => false]) ?>
+                            <?= $this->Html->link(__('Change Password'), ['controller' => 'Users', 'action' => 'change_password','plugin'=>false],['escape' => false]) ?>
                         </li>
                         <li class="divider"></li>
                         <li>
-                            <?= $this->Html->link('<i class="fa fa-fw fa-power-off"></i> '.__('Log Out'), ['controller' => 'Users', 'action' => 'logout','prefix'=>false],['escape' => false]) ?>
+                            <?= $this->Html->link('<i class="fa fa-fw fa-power-off"></i> '.__('Log Out'), ['controller' => 'Users', 'action' => 'logout','prefix'=>false,'plugin'=>false],['escape' => false]) ?>
                         </li>
                     </ul>
                 </li>
@@ -70,9 +70,19 @@
                     <!--<li class="active">
                         <a href="index.html"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
                     </li>-->
-                    <li  class="active">
-                        <?= $this->Html->link('<i class="fa fa-fw fa-users"></i> '.__('Users'), ['controller' => 'Users', 'action' => 'index'],['escape' => false]) ?>
+                    <li>
+                        <?= $this->Html->link(__('Users'), ['controller' => 'Users', 'action' => 'index','plugin'=>false],['escape' => false]) ?>
                         
+                    </li>
+                    <li>
+                        <?= $this->Html->link(__('Forum Categories'), ['controller' => 'ForumCategories', 'action' => 'index','plugin'=>'AgiraForum'],['escape' => false]) ?>
+                        
+                    </li>
+                    <li>
+                        <?= $this->Html->link(__('Forum Topics'), ['controller' => 'ForumTopics', 'action' => 'index','plugin'=>'AgiraForum'],['escape' => false]) ?>
+                    </li>
+                    <li>
+                        <?= $this->Html->link(__('Forum Tags'), ['controller' => 'ForumTags', 'action' => 'index','plugin'=>'AgiraForum'],['escape' => false]) ?>
                     </li>
                 </ul>
             </div>

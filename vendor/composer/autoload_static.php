@@ -82,6 +82,8 @@ class ComposerStaticInita7ae8ac57460407d3c5ad44d28ddd989
             'Aura\\Intl\\_Config\\' => 18,
             'App\\Test\\' => 9,
             'App\\' => 4,
+            'AgiraForum\\Test\\' => 16,
+            'AgiraForum\\' => 11,
         ),
     );
 
@@ -225,6 +227,14 @@ class ComposerStaticInita7ae8ac57460407d3c5ad44d28ddd989
         'App\\' => 
         array (
             0 => __DIR__ . '/../..' . '/src',
+        ),
+        'AgiraForum\\Test\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/plugins/AgiraForum/tests',
+        ),
+        'AgiraForum\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/plugins/AgiraForum/src',
         ),
     );
 

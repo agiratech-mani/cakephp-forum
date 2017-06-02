@@ -55,7 +55,8 @@ class AppController extends Controller
             'loginAction' => [
                 'controller' => 'Users',
                 'action' => 'login',
-                'prefix' => false
+                'prefix' => false,
+                'plugin'=>false
             ],
             // 'loginRedirect' => [
             //     'controller' => 'Users',
@@ -64,7 +65,8 @@ class AppController extends Controller
             // ],
             'logoutRedirect' => [
                 'controller' => 'Users',
-                'action' => 'login'
+                'action' => 'login',
+                'plugin'=>false
             ],
             'authorize' => 'Controller',
             'unauthorizedRedirect' => $this->referer() // If unauthorized, return them to page they were just on

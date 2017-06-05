@@ -9,10 +9,11 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="icon" href="favicon-transparent.png" type="image/x-icon">
-    <title>Blog Home - Start Bootstrap Template</title>
+    <title>Home</title>
     <?= $this->Html->css('bootstrap.min.css') ?>
+    <?= $this->Html->css('font-awesome/css/font-awesome.min.css') ?>
     <?= $this->Html->css('public.css') ?>
-
+    <?= $this->Html->css('common.css') ?>
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>

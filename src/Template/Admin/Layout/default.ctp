@@ -10,7 +10,7 @@
     <meta name="author" content="">
     <link rel="icon" href="favicon-transparent.png" type="image/x-icon">
 
-    <title>Forum Admin: <?= $this->fetch('title') ?></title>
+    <title>Forum Admin: <?= $title ?></title>
 
     <!-- Bootstrap Core CSS -->
     <?= $this->Html->css('bootstrap.min.css') ?>
@@ -83,6 +83,9 @@
                     </li>
                     <li>
                         <?= $this->Html->link(__('Forum Tags'), ['controller' => 'ForumTags', 'action' => 'index','plugin'=>'AgiraForum'],['escape' => false]) ?>
+                    </li>
+                    <li>
+                        <?= $this->Html->link(__('Forums'), ['controller' => 'ForumForums', 'action' => 'index','plugin'=>'AgiraForum'],['escape' => false]) ?>
                     </li>
                 </ul>
             </div>

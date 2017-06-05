@@ -8,12 +8,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="favicon-transparent.png" type="image/x-icon">
+    <?= $this->Html->meta(
+        'favicon-transparent.png',
+        '/favicon-transparent.png',
+        ['type' => 'icon']
+    );
+    ?>  
     <title><?=$this->fetch('title'); ?></title>
     <?= $this->Html->css('bootstrap.css') ?>
-    <?= $this->Html->css('public.css') ?>
     <?= $this->Html->css('font-awesome/css/font-awesome.min.css') ?>
+    <?= $this->Html->css('public.css') ?>
+    <?= $this->Html->css('AgiraForum.editor'); ?>
     <?= $this->Html->css('common.css') ?>
+    
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -45,6 +52,9 @@
     <?= $this->element('public-footer'); ?>
     <?= $this->Html->script('jquery.js') ?>
     <?= $this->Html->script('bootstrap.min.js') ?>
+    <?= $this->Html->script('AgiraForum.jquery.form'); ?>
+    <?= $this->Html->script('AgiraForum.editor'); ?>
+    <?= $this->Html->script('AgiraForum.common'); ?>
 </body>
 
 </html>

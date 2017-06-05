@@ -1,38 +1,20 @@
-<?php
-/**
-  * @var \App\View\AppView $this
-  */
-?>
-<nav class="large-3 medium-4 columns" id="actions-sidebar">
-    <ul class="side-nav">
-        <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Form->postLink(
-                __('Delete'),
-                ['action' => 'delete', $forumForum->id],
-                ['confirm' => __('Are you sure you want to delete # {0}?', $forumForum->id)]
-            )
-        ?></li>
-        <li><?= $this->Html->link(__('List Forum Forums'), ['action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('List Forum Topics'), ['controller' => 'ForumTopics', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New Forum Topic'), ['controller' => 'ForumTopics', 'action' => 'add']) ?></li>
-        <li><?= $this->Html->link(__('List Users'), ['controller' => 'Users', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New User'), ['controller' => 'Users', 'action' => 'add']) ?></li>
-        <li><?= $this->Html->link(__('List Forum Posts'), ['controller' => 'ForumPosts', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New Forum Post'), ['controller' => 'ForumPosts', 'action' => 'add']) ?></li>
-    </ul>
-</nav>
-<div class="forumForums form large-9 medium-8 columns content">
-    <?= $this->Form->create($forumForum) ?>
-    <fieldset>
-        <legend><?= __('Edit Forum Forum') ?></legend>
-        <?php
-            echo $this->Form->input('forum_topic_id', ['options' => $forumTopics]);
-            echo $this->Form->input('title');
-            echo $this->Form->input('content');
-            echo $this->Form->input('user_id', ['options' => $users]);
-            echo $this->Form->input('status');
-        ?>
-    </fieldset>
-    <?= $this->Form->button(__('Submit')) ?>
-    <?= $this->Form->end() ?>
-</div>
+<?= $this->Form->create($forumPost,[
+'url' => ['controller' => 'ForumForums', 'action' => 'edit',$forumid,$forumPost->id],
+'class'=>'formPostEdit ajaxForm','type'=>'POST',
+
+]) ?>
+<fieldset>
+    <div class="form-group required clearfix">
+        <!--<label class="control-label">Content</label>-->
+        <?= $this->Form->input('content',['type'=>'textarea','class'=>"form-control jsTextEditor","id"=>"postdata-".$forumPost->id,'label'=>false]) ?>
+       
+        <?= $this->Form->input('forum_forum_id',['type'=>'hidden','value'=>$forumid]) ?>
+        <?= $this->Form->input('status',['type'=>'hidden','value'=>1]) ?>
+    </div>
+    <div class="form-group clearfix">
+        <a href="#" class="btn btn-m btn-default btn-inline btnCommentCancel" data-id="<?= $forumPost->id ?>">Cancel</a>
+
+        <?= $this->Form->button('Save Comment',['class'=>"btn btn-m btn-success btn-inline pull-right btnSubmit",'type'=>'button']) ?>
+    </div>
+</fieldset>
+<?= $this->Form->end(); ?>

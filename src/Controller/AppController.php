@@ -16,7 +16,10 @@ namespace App\Controller;
 
 use Cake\Controller\Controller;
 use Cake\Event\Event;
-
+use Cake\I18n\Time;
+        use Cake\I18n\Date;
+        use Cake\I18n\FrozenTime;
+        use Cake\I18n\FrozenDate;
 /**
  * Application Controller
  *
@@ -88,6 +91,14 @@ class AppController extends Controller
          */
         //$this->loadComponent('Security');
         //$this->loadComponent('Csrf');
+        $authUser = $this->Auth->user();
+        $this->set("authUser", $authUser);
+        
+        Time::setJsonEncodeFormat('yyyy-MM-dd HH:mm:ss');  // For any mutable DateTime
+        FrozenTime::setJsonEncodeFormat('yyyy-MM-dd HH:mm:ss');  // For any immutable DateTime
+        Date::setJsonEncodeFormat('yyyy-MM-dd HH:mm:ss');  // For any mutable Date
+        FrozenDate::setJsonEncodeFormat('yyyy-MM-dd HH:mm:ss');
+        
     }
     public function isAuthorized($user)
     {

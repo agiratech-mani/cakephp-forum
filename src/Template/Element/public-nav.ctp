@@ -26,7 +26,7 @@
                    
                     <?php else: ?>
                     <li>
-                        <?= $this->Html->link('<i class="fa fa-fw fa-power-off"></i> '.__('Forum'), ['controller' => 'ForumForums', 'action' => 'index','prefix'=>false,'plugin'=>'AgiraForum'],['escape' => false]) ?>
+                        <?= $this->Html->link(__('Forum'), ['controller' => 'ForumForums', 'action' => 'index','prefix'=>false,'plugin'=>'AgiraForum'],['escape' => false]) ?>
                     </li>
                     <li>
                       <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> <?= $loguser['username'] ?> <b class="caret"></b></a>

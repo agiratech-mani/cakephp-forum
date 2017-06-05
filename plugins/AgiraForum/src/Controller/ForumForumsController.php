@@ -2,7 +2,6 @@
 namespace AgiraForum\Controller;
 
 use AgiraForum\Controller\AppController;
-
 /**
  * ForumForums Controller
  *
@@ -37,14 +36,11 @@ class ForumForumsController extends AppController
     public function view($slug = null)
     {
         $forumForum = $this->ForumForums->findBySlug($slug)
-        ->contain(['ForumTopics', 'Users', 'ForumPosts'=>['Users']])->first();
-        $this->ForumForums->updateAll(array('hits'=>($forumForum->hits+1)), array('ForumForums.id'=>$forumForum->id));
-
-        $post = $this->ForumForums->ForumPosts->newEntity();
-
+        ->contain(['ForumTopics'=>['ForumCategories'], 'Users', 'ForumPosts'=>['Users']])->first();
+        //$this->ForumForums->updateAll(array('hits'=>($forumForum->hits+1)), array('ForumForums.id'=>$forumForum->id));
         $this->set('forumForum', $forumForum);
+        $post = $this->ForumForums->ForumPosts->newEntity();
         $this->set('post', $post);
-        
         $this->set('_serialize', ['forumForum']);
     }
 
@@ -80,40 +76,50 @@ class ForumForumsController extends AppController
         $this->set('_serialize', ['forumForum']);
     }
 
-    /**
-     * Edit method
-     *
-     * @param string|null $id Forum Forum id.
-     * @return \Cake\Network\Response|null Redirects on successful edit, renders view otherwise.
-     * @throws \Cake\Network\Exception\NotFoundException When record not found.
-     */
-    public function edit($id = null)
+    public function edit($forumid = null,$id = null)
     {
-        $forumForum = $this->ForumForums->get($id, [
-            'contain' => []
-        ]);
+        if(!is_null($id))
+        {
+            $forumPost = $this->ForumForums->ForumPosts->get($id, [
+                'contain' => []
+            ]);
+        }
+        else
+        {
+            $forumPost = $this->ForumForums->ForumPosts->newEntity(); 
+        }
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $forumForum = $this->ForumForums->patchEntity($forumForum, $this->request->data);
-            if ($this->ForumForums->save($forumForum)) {
+            $forumPost = $this->ForumForums->ForumPosts->patchEntity($forumPost, $this->request->data);
+            if ($this->ForumForums->ForumPosts->save($forumPost)) {
                 $this->Flash->success(__('The forum forum has been saved.'));
+                if(!is_null($id))
+                {
+                    $forumPost = $this->ForumForums->ForumPosts->get($id, [
+                        'contain' => ["Users"]
+                    ]);
+                    echo "edit*";
+                }
+                else
+                {
+                    $id = $forumPost->id;
+                    $forumPost = $this->ForumForums->ForumPosts->get($id, [
+                        'contain' => ["Users"]
+                    ]);
+                    echo "new*";
+                    //return "redirect*url";
+                }
+                //return $this->redirect(['action' => 'index']);
+                $this->set(compact('forumPost'));
+                return $this->render('preview');
 
-                return $this->redirect(['action' => 'index']);
             }
             $this->Flash->error(__('The forum forum could not be saved. Please, try again.'));
         }
-        $forumTopics = $this->ForumForums->ForumTopics->find('list', ['limit' => 200]);
-        $users = $this->ForumForums->Users->find('list', ['limit' => 200]);
-        $this->set(compact('forumForum', 'forumTopics', 'users'));
-        $this->set('_serialize', ['forumForum']);
+        $this->viewBuilder()->layout("ajax");
+        $this->set(compact('forumPost','forumid'));
+        $this->set('_serialize', ['forumPost']);
     }
-
-    /**
-     * Delete method
-     *
-     * @param string|null $id Forum Forum id.
-     * @return \Cake\Network\Response|null Redirects to index.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
+    
     public function delete($id = null)
     {
         $this->request->allowMethod(['post', 'delete']);
@@ -125,5 +131,14 @@ class ForumForumsController extends AppController
         }
 
         return $this->redirect(['action' => 'index']);
+    }
+    public function preview($id = null)
+    {
+        $forumPost = $this->ForumForums->ForumPosts->get($id, [
+            'contain' => ["Users"]
+        ]);
+        $this->set(compact('forumPost'));
+        $this->viewBuilder()->layout("ajax");
+        return $this->render('preview');
     }
 }

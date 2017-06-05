@@ -53,7 +53,8 @@ class ForumForumsTable extends Table
         ]);
         $this->hasMany('ForumPosts', [
             'foreignKey' => 'forum_forum_id',
-            'className' => 'AgiraForum.ForumPosts'
+            'className' => 'AgiraForum.ForumPosts',
+            'sort' => ['id'>'asc']
         ]);
         $this->belongsToMany('ForumTags', [
             'foreignKey' => 'forum_forum_id',

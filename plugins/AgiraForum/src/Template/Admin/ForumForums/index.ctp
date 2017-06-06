@@ -23,7 +23,7 @@
             <tr>
                 <td><?= $this->Number->format($forumForum->id) ?></td>
                 <td><?= $forumForum->has('forum_topic') ? $forumForum->forum_topic->name : '' ?></td>
-                <td><?= h($forumForum->title) ?></td>
+                <td><?= $this->Html->link($forumForum->title, ['controller'=>'ForumPosts','action' => 'index', $forumForum->id,'prefix'=>'admin'], ['escape'=>false]); ?></td>
                 <td><?= $forumForum->has('user') ? $forumForum->user->username : '' ?></td>
                 <td>
                     <?php
@@ -51,9 +51,19 @@
 
                 <td class="actions">
                     <?php //echo $this->Html->link('<i class="fa fa-fw fa-pencil"></i> ', ['action' => 'edit', $forumForum->id],['escape'=>false]) ?>
-                    <?= $this->Form->postLink('<i class="fa fa-fw fa-remove"></i> ', ['action' => 'changeStatus', $forumForum->id,3], ['confirm' => __('Are you sure you want to close this discussion # {0}?', $forumForum->title),'escape'=>false]) ?>
+                    <?php
+                    if($forumForum->status == 1)
+                    {
+                        echo  $this->Form->postLink('<i class="fa fa-fw fa-close"></i> ', ['action' => 'changeStatus', $forumForum->id,3], ['confirm' => __('Are you sure you want to close this discussion # {0}?', $forumForum->title),'escape'=>false,'title'=>'To close the discussion']);
+                    }
+                    ?>
 
-                    <?= $this->Form->postLink('<i class="fa fa-fw fa-remove"></i> ', ['action' => 'delete', $forumForum->id], ['confirm' => __('Are you sure you want to delete # {0}?', $forumForum->title),'escape'=>false]) ?>
+                    <?php
+                    if($forumForum->status != 2)
+                    {
+                        echo $this->Form->postLink('<i class="fa fa-fw fa-trash"></i> ', ['changeStatus' => 'delete', $forumForum->id,2], ['confirm' => __('Are you sure you want to delete # {0}?', $forumForum->title),'escape'=>false,'title'=>'To delete the discussion']);
+                    }
+                    ?>
                 </td>
             </tr>
         <?php endforeach; ?>

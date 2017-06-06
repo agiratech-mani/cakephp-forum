@@ -2,6 +2,7 @@
 namespace AgiraForum\Controller;
 
 use AgiraForum\Controller\AppController;
+use Cake\ORM\TableRegistry;
 /**
  * ForumForums Controller
  *
@@ -18,7 +19,8 @@ class ForumForumsController extends AppController
     public function index()
     {
         $this->paginate = [
-            'contain' => ['ForumTopics', 'Users']
+            'contain' => ['ForumTopics', 'Users'],
+            'conditions' => ['ForumForums.status in'=>[1,3]]
         ];
         $forumForums = $this->paginate($this->ForumForums);
 
@@ -36,7 +38,7 @@ class ForumForumsController extends AppController
     public function view($slug = null)
     {
         $forumForum = $this->ForumForums->findBySlug($slug)
-        ->contain(['ForumTopics'=>['ForumCategories'], 'Users', 'ForumPosts'=>['Users']])->first();
+        ->contain(['ForumTopics'=>['ForumCategories'], 'Users', 'ForumPosts'=>['Users','conditions'=>['ForumPosts.status'=>1]],'ForumTags'])->first();
         //$this->ForumForums->updateAll(array('hits'=>($forumForum->hits+1)), array('ForumForums.id'=>$forumForum->id));
         $this->set('forumForum', $forumForum);
         $post = $this->ForumForums->ForumPosts->newEntity();
@@ -54,15 +56,9 @@ class ForumForumsController extends AppController
         $forumForum = $this->ForumForums->newEntity();
 
         if ($this->request->is('post')) {
-            // print_r($this->request->data);
-            // die;
-            //$forumForum->dirty('forum_posts', true);
             $forumForum = $this->ForumForums->patchEntity($forumForum, $this->request->data,['associated' => ['ForumPosts','ForumTags']]);
-            // echo "<pre>";
-            // print_r($forumForum );
-            // die;
             if ($this->ForumForums->save($forumForum,['associated' => ['ForumPosts','ForumTags']])) {
-                $this->Flash->success(__('The forum forum has been saved.'));
+                $this->Flash->success(__('The forum has been saved.'));
 
                 return $this->redirect(['action' => 'index']);
             }
@@ -75,7 +71,32 @@ class ForumForumsController extends AppController
         $this->set(compact('forumForum', 'forumTopics', 'users','tags'));
         $this->set('_serialize', ['forumForum']);
     }
+    public function forumEdit($id = null)
+    {
+        $forumForum = $this->ForumForums->get($id, [
+                'contain' => ['ForumPosts','ForumTags']
+        ]);
+        if ($this->request->is('post')) {
+            $forumForum = $this->ForumForums->patchEntity($forumForum, $this->request->data,['associated' => ['ForumPosts','ForumTags']]);
+            if ($this->ForumForums->save($forumForum,['associated' => ['ForumPosts','ForumTags']])) {
+                $this->Flash->success(__('The forum has been saved.'));
 
+                return $this->redirect(['action' => 'view',$forumForum->slug]);
+            }
+            echo "<pre>";
+            print_r($forumForum);
+            echo "</pre>";
+            die;
+            $this->Flash->error(__('The forum could not be saved. Please, try again.'));
+        }
+        $forumTopics = $this->ForumForums->ForumTopics->find('list', ['limit' => 200]);
+        $tags = $this->ForumForums->ForumTags->find('list', ['limit' => 200]);
+        $title = "Edit Forum - ".$forumForum->title;
+        $this->set(compact('forumForum', 'forumTopics', 'users','tags','title'));
+        $this->set('_serialize', ['forumForum']);
+
+    }
+    
     public function edit($forumid = null,$id = null)
     {
         if(!is_null($id))
@@ -91,7 +112,7 @@ class ForumForumsController extends AppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             $forumPost = $this->ForumForums->ForumPosts->patchEntity($forumPost, $this->request->data);
             if ($this->ForumForums->ForumPosts->save($forumPost)) {
-                $this->Flash->success(__('The forum forum has been saved.'));
+                //$this->Flash->success(__('The forum forum has been saved.'));
                 if(!is_null($id))
                 {
                     $forumPost = $this->ForumForums->ForumPosts->get($id, [
@@ -141,4 +162,15 @@ class ForumForumsController extends AppController
         $this->viewBuilder()->layout("ajax");
         return $this->render('preview');
     }
+    public function userForums()
+    {
+        $user = $this->Auth->user();
+        $this->paginate = [
+            'contain' => ['ForumTopics', 'Users'],
+            'conditions' => ['ForumForums.user_id'=>$user['id']]
+        ];
+        $forumForums = $this->paginate($this->ForumForums);
+        $this->set(compact('forumForums'));
+        return $this->render('forums');
+    }   
 }

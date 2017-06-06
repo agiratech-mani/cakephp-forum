@@ -32,10 +32,16 @@
                       <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> <?= $loguser['username'] ?> <b class="caret"></b></a>
                         <ul class="dropdown-menu">
                             <li>
-                                <?= $this->Html->link('<i class="fa fa-fw fa-user"></i> '.__('Profile'), ['controller' => 'Users', 'action' => 'edit',$loguser['id'],'plugin'=>false],['escape' => false]) ?>
+                                <?= $this->Html->link(__('Profile'), ['controller' => 'Users', 'action' => 'edit',$loguser['id'],'plugin'=>false],['escape' => false]) ?>
+                            </li>
+                            <li>
+                                <?= $this->Html->link(__('Forums'), ['controller' => 'ForumForums', 'action' => 'userForums','plugin'=>"AgiraForum"],['escape' => false]) ?>
+                            </li>
+                            <li>
+                                <?= $this->Html->link(__('Posts'), ['controller' => 'ForumForums', 'action' => 'userPosts','plugin'=>"AgiraForum"],['escape' => false]) ?>
                             </li>
                              <li>
-                                <?= $this->Html->link('<i class="fa fa-fw fa-user"></i> '.__('Change Password'), ['controller' => 'Users', 'action' => 'change_password',$loguser['id'],'plugin'=>false],['escape' => false]) ?>
+                                <?= $this->Html->link(__('Change Password'), ['controller' => 'Users', 'action' => 'change_password',$loguser['id'],'plugin'=>false],['escape' => false]) ?>
                             </li>
                             <li class="divider"></li>
                             <li>

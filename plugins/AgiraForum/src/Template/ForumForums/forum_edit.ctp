@@ -1,5 +1,5 @@
 <div>
-    <h3>Post new Forum</h3>
+    <h3><?php echo $title;?></h3>
     <hr>
     <div class="col-md-offset-2 col-md-8 login-panel panel panel-default" style="padding-top:10px">
         <?= $this->Form->create($forumForum,['class'=>'','type'=>'POST']) ?>
@@ -19,15 +19,11 @@
                 <div class="form-group required">
                     <label>Content</label>
                     <div>
-                        <?= $this->Form->input('forum_posts[0].content',['type'=>'textarea','class'=>"form-control jsTextEditor",'label'=>false]) ?>
+                        <?= $this->Form->input('forum_posts[0].content',['type'=>'textarea','class'=>"form-control jsTextEditor",'label'=>false,'value'=>$forumForum->forum_posts[0]->content]) ?>
                         <?php
                             $loguser = $this->request->session()->read('Auth.User');
                         ?>
-                        <?= $this->Form->input('user_id',['type'=>'hidden','value'=>$loguser['id']]) ?>
-                        <?= $this->Form->input('status',['type'=>'hidden','value'=>1]) ?>
-                        <?= $this->Form->input('forum_posts[0].user_id',['type'=>'hidden','value'=>$loguser['id']]) ?>
-                        <?= $this->Form->input('forum_posts[0].status',['type'=>'hidden','value'=>1]) ?>
-                        <?= $this->Form->input('forum_posts[0].is_original',['type'=>'hidden','value'=>1]) ?>
+                        <?= $this->Form->input('forum_posts[0].id',['class'=>"form-control",'type'=>'hidden','value'=>$forumForum->forum_posts[0]->id]) ?>
                     </div>
                 </div>
                 <div class="form-group required">
@@ -37,6 +33,7 @@
                     </div>
                 </div>
                 <div class="form-group">
+                    <?= $this->Html->link("Cancel",['controller'=>'ForumForums','action'=>'view',$forumForum->slug],['class'=>'btn btn-default']) ?>
                     <?= $this->Form->button('Submit',['class'=>"btn btn-m btn-success btn-inline btnSubmit pull-right",'type'=>'button']) ?>
                 </div>
             </fieldset>

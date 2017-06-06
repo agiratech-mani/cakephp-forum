@@ -10,6 +10,9 @@ Router::plugin(
     		$routes->connect('/', ['controller' => 'ForumForums', 'action' =>'index' ]);
     		$routes->connect('/posts', ['controller' => 'ForumForums', 'action' =>'index' ]);
     		$routes->connect('/posts/:action/*', ['controller' => 'ForumForums']);
+
+			$routes->connect('/profile/forums', ['controller' => 'ForumForums', 'action' =>'userForums']);
+			$routes->connect('/profile/posts', ['controller' => 'ForumPosts', 'action' =>'userPosts']);
         $routes->fallbacks(DashedRoute::class);
     }
 );
@@ -24,6 +27,11 @@ Router::prefix('admin', function ($routes) {
     		$routes->connect('/tags', ['controller' => 'ForumTags', 'action' =>'index' ]);
     		$routes->connect('/tags/:action/*', ['controller' => 'ForumTags']);
 
+			$routes->connect('/posts', ['controller' => 'ForumForums', 'action' =>'index' ]);
+    		$routes->connect('/posts/:action/*', ['controller' => 'ForumForums']);
+
+			$routes->connect('/contents', ['controller' => 'ForumPosts', 'action' =>'index' ]);
+    		$routes->connect('/contents/:action/*', ['controller' => 'ForumPosts']);
 
     		$routes->fallbacks(DashedRoute::class);
     });

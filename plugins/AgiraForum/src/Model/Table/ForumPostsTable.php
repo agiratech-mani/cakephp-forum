@@ -47,13 +47,12 @@ class ForumPostsTable extends Table
         $this->belongsTo('ForumForums', [
             'foreignKey' => 'forum_forum_id',
             'joinType' => 'INNER',
-            'className' => 'AgiraForum.ForumForums',
-            //'counterCache' => 'forum_post_count'
+            'className' => 'AgiraForum.ForumForums'
         ]);
         $this->belongsTo('Users', [
             'foreignKey' => 'user_id',
             'joinType' => 'INNER',
-            'className' => 'AgiraForum.Users'
+            'className' => 'Users'
         ]);
     }
 

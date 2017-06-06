@@ -10,13 +10,14 @@
     <meta name="author" content="">
     <link rel="icon" href="favicon-transparent.png" type="image/x-icon">
 
-    <title>Forum Admin: <?= $title ?></title>
+    <title>Admin: <?= $this->fetch("title") ?></title>
 
     <!-- Bootstrap Core CSS -->
     <?= $this->Html->css('bootstrap.min.css') ?>
     <?= $this->Html->css('admin.css') ?>
     <?= $this->Html->css('plugins/morris.css') ?>
     <?= $this->Html->css('font-awesome/css/font-awesome.min.css') ?>
+    <?= $this->Html->css('AgiraForum.editor'); ?>
     <?= $this->Html->css('common.css') ?>
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -108,10 +109,9 @@
 
     <?= $this->Html->script('jquery.js') ?>
     <?= $this->Html->script('bootstrap.min.js') ?>
-    <?= $this->Html->script('plugins/morris/raphael.min.js') ?>
-    <?= $this->Html->script('plugins/morris/morris.min.js') ?>
-    <?= $this->Html->script('plugins/morris/morris-data.js') ?>
-
+    <?= $this->Html->script('AgiraForum.jquery.form'); ?>
+    <?= $this->Html->script('AgiraForum.editor'); ?>
+    <?= $this->Html->script('AgiraForum.common'); ?>
 </body>
 
 </html>

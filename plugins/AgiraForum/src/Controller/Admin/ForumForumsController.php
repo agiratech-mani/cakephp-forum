@@ -2,7 +2,7 @@
 namespace AgiraForum\Controller\Admin;
 
 use AgiraForum\Controller\AppController;
-
+use Cake\ORM\TableRegistry;
 /**
  * ForumForums Controller
  *
@@ -29,13 +29,14 @@ class ForumForumsController extends AppController
     public function changeStatus($id = NULL,$status = NULL)
     {
         $ForumForums = TableRegistry::get('ForumForums');
-        $forumForum = $ForumForums->find($id);
+        $forumForum = $ForumForums->get($id);
         if(!empty($forumForum))
         {
             $forumForum->status = $status;
             $ForumForums->save($forumForum);
             $this->Flash->success(__('Forum discussion closed successfully.'));
         }
+         return $this->redirect(['action' => 'index']);
     }
     /**
      * View method

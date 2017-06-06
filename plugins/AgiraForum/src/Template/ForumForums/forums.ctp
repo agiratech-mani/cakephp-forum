@@ -2,7 +2,7 @@
     <h3>Forums</h3>
     <hr>
     <div class="clearfix">
-       <?= $this->Html->link('<i class="fa fa-fw fa-plus"></i> '.__('Post new Forum'), ['controller' => 'ForumForums', 'action' => 'add'],['escape' => false,'class'=>'pull-right mar5 btn btn-info btn-m']) ?>
+       <?= $this->Html->link('<i class="fa fa-fw fa-plus"></i> '.__('New Forum'), ['controller' => 'ForumForums', 'action' => 'add'],['escape' => false,'class'=>'pull-right mar5 btn btn-info btn-m']) ?>
     </div>
     <div>
         <table class="table table-striped">
@@ -11,9 +11,9 @@
                     <th>FORUM</th>
                     <th>TOPIC</th>
                     <th>STATUS</th>
-                    <th>STARTED BY</th>
                     <th>POST</th>
                     <th>VIEWS</th>
+                    <th>ACTIONS</th>
                 </tr>
             </thead>
             <tbody>
@@ -45,9 +45,16 @@
                             }
                         ?>
                     </td>
-                    <td><?= (!empty($forumForum->user->first_name)?$forumForum->user->first_name." ".$forumForum->user->last_name:$forumForum->user->username) ?></td>
-                    <td><?= h($forumForum->forum_post_count) ?></td>
-                    <td><?= h($forumForum->hits) ?></td>
+                    <td><?= $this->Number->format($forumForum->forum_post_count) ?></td>
+                    <td><?= $this->Number->format($forumForum->hits) ?></td>
+                    <td class="text-center">
+                    <?php
+                    if($forumForum->status == 1)
+                    {
+                        echo $this->Html->link('<i class="fa fa-pencil"></i>', ['controller' => 'ForumForums', 'action' => 'forumEdit', $forumForum->id],['escape'=>false]);
+                    }
+                    ?>
+                    </td>
                 </tr>
             <?php 
                 endforeach; 

@@ -1,5 +1,5 @@
 <div class="users index large-9 medium-8 columns content">
-    <h3><?= __('Forum Topics') ?></h3>
+    <h3><?= $title ?></h3>
     <hr>
     <div class="clearfix">
        <?= $this->Html->link('<i class="fa fa-fw fa-plus"></i> '.__('Add'), ['controller' => 'forumTopics', 'action' => 'add'],['escape' => false,'class'=>'pull-right mar5 btn btn-info btn-m']) ?>
@@ -20,10 +20,10 @@
             <tr>
                 <td><?= $this->Number->format($topic->id) ?></td>
                 <td><?= h($topic->name) ?></td>
-                <td><?= $topic->has('forum_category') ? $this->Html->link($topic->forum_category->name, ['controller' => 'ForumCategories', 'action' => 'view', $topic->forum_category->id]) : '' ?></td>
+                <td><?= $topic->has('forum_category') ? $topic->forum_category->name : '' ?></td>
                 <td><?=  ($topic->active)?'Yes':'No' ?></td>
-                <td><?= h($topic->created) ?></td>
-                <td class="actions">
+                <td><?= $this->Forum->date($topic->created) ?></td>
+                <td class="actions text-center">
                     <?= $this->Html->link('<i class="fa fa-fw fa-pencil"></i> ', ['action' => 'edit', $topic->id],['escape'=>false]) ?>
                     <?= $this->Form->postLink('<i class="fa fa-fw fa-remove"></i> ', ['action' => 'delete', $topic->id], ['confirm' => __('Are you sure you want to delete # {0}?', $topic->name),'escape'=>false]) ?>
                 </td>

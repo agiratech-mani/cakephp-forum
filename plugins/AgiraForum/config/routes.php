@@ -9,10 +9,12 @@ Router::plugin(
     function (RouteBuilder $routes) {
     		$routes->connect('/', ['controller' => 'ForumForums', 'action' =>'index' ]);
     		$routes->connect('/posts', ['controller' => 'ForumForums', 'action' =>'index' ]);
+            $routes->connect('/posts/like/*', ['controller' => 'ForumPostLikes', 'action' =>'like']);
     		$routes->connect('/posts/:action/*', ['controller' => 'ForumForums']);
 
 			$routes->connect('/profile/forums', ['controller' => 'ForumForums', 'action' =>'userForums']);
-			$routes->connect('/profile/posts', ['controller' => 'ForumPosts', 'action' =>'userPosts']);
+            $routes->connect('/profile/posts', ['controller' => 'ForumPosts', 'action' =>'userPosts']);
+			
         $routes->fallbacks(DashedRoute::class);
     }
 );

@@ -1,5 +1,5 @@
 <div class="users index large-9 medium-8 columns content">
-    <h3><?= __('Forum Categories') ?></h3>
+    <h3><?= $title ?></h3>
     <hr>
     <div class="clearfix">
        <?= $this->Html->link('<i class="fa fa-fw fa-plus"></i> '.__('Add'), ['controller' => 'forumCategories', 'action' => 'add'],['escape' => false,'class'=>'pull-right mar5 btn btn-info btn-m']) ?>
@@ -19,9 +19,9 @@
             <tr>
                 <td><?= $this->Number->format($forumCategory->id) ?></td>
                 <td><?= h($forumCategory->name) ?></td>
-                <td><?=  ($forumCategory->active)?'Yes':'No' ?></td>
-                <td><?= h($forumCategory->created) ?></td>
-                <td class="actions">
+                <td><?= ($forumCategory->active)?'Yes':'No' ?></td>
+                <td><?= $this->Forum->date($forumCategory->created) ?></td>
+                <td class="actions text-center">
                     <?= $this->Html->link('<i class="fa fa-fw fa-pencil"></i> ', ['action' => 'edit', $forumCategory->id],['escape'=>false]) ?>
                     <?= $this->Form->postLink('<i class="fa fa-fw fa-remove"></i> ', ['action' => 'delete', $forumCategory->id], ['confirm' => __('Are you sure you want to delete # {0}?', $forumCategory->name),'escape'=>false]) ?>
                 </td>

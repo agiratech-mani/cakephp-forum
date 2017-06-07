@@ -23,7 +23,8 @@ class ForumForumsController extends AppController
             'conditions' => ['ForumForums.status in'=>[1,3]]
         ];
         $forumForums = $this->paginate($this->ForumForums);
-
+        $title = "Forums";
+        $this->set('title',$title);
         $this->set(compact('forumForums'));
         $this->set('_serialize', ['forumForums']);
     }
@@ -31,18 +32,30 @@ class ForumForumsController extends AppController
     /**
      * View method
      *
-     * @param string|null $id Forum Forum id.
+     * @param string|null $id forum id.
      * @return \Cake\Network\Response|null
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
     public function view($slug = null)
     {
+        $user = $this->Auth->user();
+        $user_id = 0;
+        if(!empty($user))
+        {
+            $user_id = $user['id'];
+        }
         $forumForum = $this->ForumForums->findBySlug($slug)
-        ->contain(['ForumTopics'=>['ForumCategories'], 'Users', 'ForumPosts'=>['Users','conditions'=>['ForumPosts.status'=>1]],'ForumTags'])->first();
+        ->contain(['ForumTopics'=>['ForumCategories'], 'Users', 'ForumPosts'=>[
+                'Users',
+                'conditions'=>['ForumPosts.status'=>1],
+                'ForumPostLikes'=>['conditions'=>['ForumPostLikes.user_id'=>$user_id]]
+            ],'ForumTags'])->first();
         //$this->ForumForums->updateAll(array('hits'=>($forumForum->hits+1)), array('ForumForums.id'=>$forumForum->id));
         $this->set('forumForum', $forumForum);
         $post = $this->ForumForums->ForumPosts->newEntity();
+        $title = $forumForum->title;
         $this->set('post', $post);
+        $this->set('title', $title);
         $this->set('_serialize', ['forumForum']);
     }
 
@@ -62,13 +75,15 @@ class ForumForumsController extends AppController
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The forum forum could not be saved. Please, try again.'));
+            $this->Flash->error(__('The forum could not be saved. Please, try again.'));
         }
         $forumTopics = $this->ForumForums->ForumTopics->find('list', ['limit' => 200]);
         $tags = $this->ForumForums->ForumTags->find('list', ['limit' => 200]);
 
         $users = $this->ForumForums->Users->find('list', ['limit' => 200]);
         $this->set(compact('forumForum', 'forumTopics', 'users','tags'));
+        $title = "Post new Forum";
+        $this->set('title', $title);
         $this->set('_serialize', ['forumForum']);
     }
     public function forumEdit($id = null)
@@ -83,10 +98,6 @@ class ForumForumsController extends AppController
 
                 return $this->redirect(['action' => 'view',$forumForum->slug]);
             }
-            echo "<pre>";
-            print_r($forumForum);
-            echo "</pre>";
-            die;
             $this->Flash->error(__('The forum could not be saved. Please, try again.'));
         }
         $forumTopics = $this->ForumForums->ForumTopics->find('list', ['limit' => 200]);
@@ -112,7 +123,7 @@ class ForumForumsController extends AppController
         if ($this->request->is(['patch', 'post', 'put'])) {
             $forumPost = $this->ForumForums->ForumPosts->patchEntity($forumPost, $this->request->data);
             if ($this->ForumForums->ForumPosts->save($forumPost)) {
-                //$this->Flash->success(__('The forum forum has been saved.'));
+                //$this->Flash->success(__('The forum has been saved.'));
                 if(!is_null($id))
                 {
                     $forumPost = $this->ForumForums->ForumPosts->get($id, [
@@ -134,7 +145,7 @@ class ForumForumsController extends AppController
                 return $this->render('preview');
 
             }
-            $this->Flash->error(__('The forum forum could not be saved. Please, try again.'));
+            $this->Flash->error(__('The forum could not be saved. Please, try again.'));
         }
         $this->viewBuilder()->layout("ajax");
         $this->set(compact('forumPost','forumid'));
@@ -146,13 +157,38 @@ class ForumForumsController extends AppController
         $this->request->allowMethod(['post', 'delete']);
         $forumForum = $this->ForumForums->get($id);
         if ($this->ForumForums->delete($forumForum)) {
-            $this->Flash->success(__('The forum forum has been deleted.'));
+            $this->Flash->success(__('The forum has been deleted.'));
         } else {
-            $this->Flash->error(__('The forum forum could not be deleted. Please, try again.'));
+            $this->Flash->error(__('The forum could not be deleted. Please, try again.'));
         }
 
         return $this->redirect(['action' => 'index']);
     }
+
+    public function close($slug = null)
+    {
+        if(!is_null($slug))
+        {
+            $forumForum = $this->ForumForums->findBySlug($slug)->first();
+            $forumForum->status = 3;
+            if($this->ForumForums->save($forumForum))
+            {
+                $this->Flash->success(__('The forum has been closed.'));
+                echo "reload*closed";
+            }
+            else
+            {
+                $this->Flash->error(__('The forum could not be closed. Please, try again.'));
+                echo "reload*error";
+            }
+            die;
+        }
+        $this->Flash->error(__('The forum could not be closed. Please, try again.'));
+        echo "reload*error";
+        die;
+    }
+
+
     public function preview($id = null)
     {
         $forumPost = $this->ForumForums->ForumPosts->get($id, [
@@ -170,6 +206,8 @@ class ForumForumsController extends AppController
             'conditions' => ['ForumForums.user_id'=>$user['id']]
         ];
         $forumForums = $this->paginate($this->ForumForums);
+        $title = "Forums";
+        $this->set('title', $title);
         $this->set(compact('forumForums'));
         return $this->render('forums');
     }   

@@ -3,24 +3,13 @@ namespace App\Controller\Admin;
 
 use App\Controller\AppController;
 
-/**
- * Users Controller
- *
- * @property \App\Model\Table\UsersTable $Users
- */
 class UsersController extends AppController
 {
-
-    /**
-     * Index method
-     *
-     * @return \Cake\Network\Response|null
-     */
     public function index()
     {
         $users = $this->paginate($this->Users);
-
-        $this->set(compact('users'));
+        $title = 'Users';
+        $this->set(compact('users','title'));
         $this->set('_serialize', ['users']);
     }
 
@@ -36,7 +25,8 @@ class UsersController extends AppController
             }
             $this->Flash->error(__('The user could not be saved. Please, try again.'));
         }
-        $this->set(compact('user'));
+        $title = 'Create new User';
+        $this->set(compact('user','title'));
         $this->set('_serialize', ['user']);
     }
     public function edit($id = null)
@@ -53,10 +43,10 @@ class UsersController extends AppController
             }
             $this->Flash->error(__('The user could not be saved. Please, try again.'));
         }
-        $this->set(compact('user'));
+        $title = "Edit User - ".$user->username;
+        $this->set(compact('user','title'));
         $this->set('_serialize', ['user']);
     }
-
     public function delete($id = null)
     {
         $this->request->allowMethod(['post', 'delete']);
@@ -66,7 +56,6 @@ class UsersController extends AppController
         } else {
             $this->Flash->error(__('The user could not be deleted. Please, try again.'));
         }
-
         return $this->redirect(['action' => 'index']);
     }
     public function changePassword()
@@ -94,9 +83,18 @@ class UsersController extends AppController
                 $this->Flash->error('There was an error during the save!');
             }
         }
-        $this->set('title','Change Password');
+        $title = "Change Password";
         unset($user['password']);
-        $this->set(compact('user'));
+        $this->set(compact('user','title'));
         $this->set('_serialize', ['user']);
+    }
+    public function view($id = null)
+    {
+        $user = $this->Users->get($id, [
+            'contain' => []
+        ]);
+        $title = "Profile: ".$user->username;
+        $this->set(compact('user','title'));
+
     }
 }

@@ -93,6 +93,7 @@ class AppController extends Controller
         //$this->loadComponent('Csrf');
         $authUser = $this->Auth->user();
         $this->set("authUser", $authUser);
+        $this->set("backLink", $this->referer());
         
         Time::setJsonEncodeFormat('yyyy-MM-dd HH:mm:ss');  // For any mutable DateTime
         FrozenTime::setJsonEncodeFormat('yyyy-MM-dd HH:mm:ss');  // For any immutable DateTime

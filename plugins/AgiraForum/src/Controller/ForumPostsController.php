@@ -19,7 +19,10 @@ class ForumPostsController extends AppController
             'conditions' => ['ForumPosts.user_id'=>$user['id'],'ForumPosts.is_original !='=>1]
         ];
         $forumPosts = $this->paginate($this->ForumPosts);
+        $title = "Posts";
+        $this->set('title', $title);
         $this->set(compact('forumPosts'));
         return $this->render('ForumForums/posts');
     }
+    
 }

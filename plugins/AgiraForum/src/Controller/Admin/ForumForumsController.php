@@ -22,7 +22,8 @@ class ForumForumsController extends AppController
             'contain' => ['ForumTopics', 'Users']
         ];
         $forumForums = $this->paginate($this->ForumForums);
-
+        $title = "Forums";
+        $this->set('title',$title);
         $this->set(compact('forumForums'));
         $this->set('_serialize', ['forumForums']);
     }
@@ -51,6 +52,8 @@ class ForumForumsController extends AppController
             'contain' => ['ForumTopics', 'Users', 'ForumTags', 'ForumPosts']
         ]);
 
+        $title = "Forum - ".$forumForum->title;
+        $this->set('title',$title);
         $this->set('forumForum', $forumForum);
         $this->set('_serialize', ['forumForum']);
     }
@@ -63,19 +66,26 @@ class ForumForumsController extends AppController
     public function add()
     {
         $forumForum = $this->ForumForums->newEntity();
+
         if ($this->request->is('post')) {
-            $forumForum = $this->ForumForums->patchEntity($forumForum, $this->request->data);
-            if ($this->ForumForums->save($forumForum)) {
-                $this->Flash->success(__('The forum forum has been saved.'));
+            $forumForum = $this->ForumForums->patchEntity($forumForum, $this->request->data,['associated' => ['ForumPosts','ForumTags']]);
+            if ($this->ForumForums->save($forumForum,['associated' => ['ForumPosts','ForumTags']])) {
+                $this->Flash->success(__('The forum has been saved.'));
 
                 return $this->redirect(['action' => 'index']);
             }
             $this->Flash->error(__('The forum forum could not be saved. Please, try again.'));
+            echo "<pre>";
+            print_r($forumForum);
+            die;
         }
         $forumTopics = $this->ForumForums->ForumTopics->find('list', ['limit' => 200]);
+        $tags = $this->ForumForums->ForumTags->find('list', ['limit' => 200]);
+
         $users = $this->ForumForums->Users->find('list', ['limit' => 200]);
-        $forumTags = $this->ForumForums->ForumTags->find('list', ['limit' => 200]);
-        $this->set(compact('forumForum', 'forumTopics', 'users', 'forumTags'));
+         $title = "Create a new Forum";
+        $this->set('title',$title);
+        $this->set(compact('forumForum', 'forumTopics', 'users','tags'));
         $this->set('_serialize', ['forumForum']);
     }
 
@@ -89,21 +99,21 @@ class ForumForumsController extends AppController
     public function edit($id = null)
     {
         $forumForum = $this->ForumForums->get($id, [
-            'contain' => ['ForumTags']
+                'contain' => ['ForumPosts','ForumTags']
         ]);
-        if ($this->request->is(['patch', 'post', 'put'])) {
-            $forumForum = $this->ForumForums->patchEntity($forumForum, $this->request->data);
-            if ($this->ForumForums->save($forumForum)) {
-                $this->Flash->success(__('The forum forum has been saved.'));
+        if ($this->request->is('post')) {
+            $forumForum = $this->ForumForums->patchEntity($forumForum, $this->request->data,['associated' => ['ForumPosts','ForumTags']]);
+            if ($this->ForumForums->save($forumForum,['associated' => ['ForumPosts','ForumTags']])) {
+                $this->Flash->success(__('The forum has been saved.'));
 
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('The forum forum could not be saved. Please, try again.'));
+            $this->Flash->error(__('The forum could not be saved. Please, try again.'));
         }
         $forumTopics = $this->ForumForums->ForumTopics->find('list', ['limit' => 200]);
-        $users = $this->ForumForums->Users->find('list', ['limit' => 200]);
-        $forumTags = $this->ForumForums->ForumTags->find('list', ['limit' => 200]);
-        $this->set(compact('forumForum', 'forumTopics', 'users', 'forumTags'));
+        $tags = $this->ForumForums->ForumTags->find('list', ['limit' => 200]);
+        $title = "Edit Forum - ".$forumForum->title;
+        $this->set(compact('forumForum', 'forumTopics', 'users','tags','title'));
         $this->set('_serialize', ['forumForum']);
     }
 

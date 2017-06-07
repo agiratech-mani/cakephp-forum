@@ -54,6 +54,11 @@ class ForumPostsTable extends Table
             'joinType' => 'INNER',
             'className' => 'Users'
         ]);
+        $this->hasMany('ForumPostLikes', [
+            'foreignKey' => 'forum_post_id',
+            'className' => 'AgiraForum.ForumPostLikes',
+            'sort' => ['id'>'asc']
+        ]);
     }
 
     /**

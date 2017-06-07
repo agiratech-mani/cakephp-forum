@@ -38,7 +38,7 @@
                                 <?= $this->Html->link(__('Forums'), ['controller' => 'ForumForums', 'action' => 'userForums','plugin'=>"AgiraForum"],['escape' => false]) ?>
                             </li>
                             <li>
-                                <?= $this->Html->link(__('Posts'), ['controller' => 'ForumForums', 'action' => 'userPosts','plugin'=>"AgiraForum"],['escape' => false]) ?>
+                                <?= $this->Html->link(__('Posts'), ['controller' => 'ForumPosts', 'action' => 'userPosts','plugin'=>"AgiraForum"],['escape' => false]) ?>
                             </li>
                              <li>
                                 <?= $this->Html->link(__('Change Password'), ['controller' => 'Users', 'action' => 'change_password',$loguser['id'],'plugin'=>false],['escape' => false]) ?>

@@ -1,11 +1,11 @@
 <?php 
-namespace AgiraForum\View\Helper;
+namespace App\View\Helper;
 
 use Cake\View\Helper;
 use Cake\View\View;
 use Cake\View\Helper\HtmlHelper;
 
-class ForumHelper extends Helper
+class CommonHelper extends Helper
 {
 	  public $helpers = array('Time');
 
@@ -14,7 +14,7 @@ class ForumHelper extends Helper
         // set meta description
     		return $this->Time->format(
                 $date,
-                "MMMM dd, yyyy H:mm a"
+                "MMMM dd, yyyy HH:mm"
         );
     }
 }

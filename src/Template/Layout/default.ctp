@@ -14,12 +14,13 @@
         ['type' => 'icon']
     );
     ?>  
-    <title><?=$this->fetch('title'); ?></title>
+    <title><?= (isset($title)?$title:$this->fetch('title')); ?></title>
     <?= $this->Html->css('bootstrap.css') ?>
     <?= $this->Html->css('font-awesome/css/font-awesome.min.css') ?>
     <?= $this->Html->css('public.css') ?>
     <?= $this->Html->css('AgiraForum.editor'); ?>
     <?= $this->Html->css('common.css') ?>
+    <?= $this->Html->css('AgiraForum.forum.css') ?>
     
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->

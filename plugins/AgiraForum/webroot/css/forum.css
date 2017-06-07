@@ -1,0 +1,25 @@
+.marRight10
+{
+	margin-right: 10px;
+}
+blockquote
+{
+	  border-left: 4px solid rgba(0, 0, 0, 0.1);
+    background: rgba(0, 0, 0, 0.05);
+}
+.commentdiv
+{
+    margin-top:10px;
+    font-size: 16px;
+    color: rgb(78, 87, 88);
+}
+.clsContentBlock
+{
+	 	border-left: 2px solid rgba(0, 0, 0, 0.1);
+}
+.tag
+{
+	border-radius: 5px 6px !important;
+	padding:0 5px !important;
+	font-weight: bold;
+}

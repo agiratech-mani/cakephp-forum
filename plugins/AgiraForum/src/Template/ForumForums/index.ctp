@@ -24,7 +24,7 @@
             ?>
                 <tr>
                     <td><?= $this->Html->link($forumForum->title, ['controller' => 'ForumForums', 'action' => 'view', $forumForum->slug]) ?></td>
-                    <td><?= h($forumForum->forum_topic->name); ?></td>
+                    <td><?= $this->Html->link($forumForum->forum_topic->name, ['controller' => 'ForumForums', 'action' => 'index', $forumForum->forum_topic->slug]) ?></td>
                     <td>
                         <?php
                             if($forumForum->status == 1)
@@ -65,5 +65,23 @@
             ?>
             </tbody>
         </table>
+    </div>
+    <div class="clearfix">
+        <div class="paginator pull-right">
+            <div class="clearfix">
+                <div class="pull-left pagination pagination-counter">
+                <p><?= $this->Paginator->counter(['format' => __('Page {{page}} of {{pages}}')]) ?></p>
+                </div>
+                <div class="pull-left">
+                <ul class="pagination">
+                    <?= $this->Paginator->first('<<') ?>
+                    <?= $this->Paginator->prev('<') ?>
+                    <?= $this->Paginator->numbers() ?>
+                    <?= $this->Paginator->next('>') ?>
+                    <?= $this->Paginator->last('>>') ?>
+                </ul>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

@@ -1,7 +1,7 @@
 <div>
-    <h3>Create a new Forum</h3>
+    <h3><?php echo $title;?></h3>
     <hr>
-    <div class="col-md-8 " style="padding-top:10px">
+    <div class="col-md-offset-2 col-md-8 login-panel panel panel-default" style="padding-top:10px">
         <?= $this->Form->create($forumForum,['class'=>'','type'=>'POST']) ?>
             <fieldset>
                 <div class="form-group required">
@@ -19,12 +19,11 @@
                 <div class="form-group required">
                     <label>Content</label>
                     <div>
-                        <?= $this->Form->input('forum_posts[0].content',['type'=>'textarea','class'=>"form-control jsTextEditor",'label'=>false]) ?>
-                        <?= $this->Form->input('user_id',['type'=>'hidden','value'=>$authUser['id']]) ?>
-                        <?= $this->Form->input('status',['type'=>'hidden','value'=>1]) ?>
-                        <?= $this->Form->input('forum_posts[0].user_id',['type'=>'hidden','value'=>$authUser['id']]) ?>
-                        <?= $this->Form->input('forum_posts[0].status',['type'=>'hidden','value'=>1]) ?>
-                        <?= $this->Form->input('forum_posts[0].is_original',['type'=>'hidden','value'=>1]) ?>
+                        <?= $this->Form->input('forum_posts[0].content',['type'=>'textarea','class'=>"form-control jsTextEditor",'label'=>false,'value'=>$forumForum->forum_posts[0]->content]) ?>
+                        <?php
+                            $loguser = $this->request->session()->read('Auth.User');
+                        ?>
+                        <?= $this->Form->input('forum_posts[0].id',['class'=>"form-control",'type'=>'hidden','value'=>$forumForum->forum_posts[0]->id]) ?>
                     </div>
                 </div>
                 <div class="form-group required">
@@ -34,8 +33,8 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <?= $this->Form->button('Submit',['class'=>"btn btn-success btn-line pull-right btnSubmit"]) ?>
-                    <?= $this->Html->link('Cancel',['controller'=>'ForumForums','action'=>'index'],['escape'=>false,'class'=>' mr-10 btn btn-default pull-right ']) ?>
+                    <?= $this->Html->link("Cancel",['controller'=>'ForumForums','action'=>'view',$forumForum->slug],['class'=>'btn btn-default']) ?>
+                    <?= $this->Form->button('Submit',['class'=>"btn btn-m btn-success btn-inline btnSubmit pull-right",'type'=>'button']) ?>
                 </div>
             </fieldset>
         <?= $this->Form->end(); ?>

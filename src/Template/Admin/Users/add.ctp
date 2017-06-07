@@ -52,7 +52,14 @@
                 <?= $this->Form->input('confirm_password',['class'=>"form-control",'label'=>false,'type'=>'password']) ?>
             </div>
         </div>
+        <div class="form-group ">
+            <label class="col-sm-4 control-label"></label>
+            <div class="col-sm-8 checkbox">
+                <?= $this->Form->input('active',['label'=>'Active?','type'=>'checkbox']) ?>
+            </div>
+        </div>
         <?= $this->Form->button('Submit',['class'=>"btn btn-m btn-success btn-inline  pull-right"]) ?>
+        <?= $this->Html->link('Cancel',['controller'=>'Users','action'=>'index'],['escape'=>false,'class'=>'btn btn-default pull-right mr-10']) ?>
     </fieldset>
 <?= $this->Form->end() ?>
 </div>

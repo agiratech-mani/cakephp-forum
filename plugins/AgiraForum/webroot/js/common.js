@@ -6,9 +6,19 @@ function xload(flag)
         $(this).click(function(){
             $this = $(this);
             var id = $this.closest("form").find(".jsTextEditor").attr('id');
-            $("#"+id).text($("#"+id).Editor('getText'));
-            $("#"+id).Editor('setText','');
-            $this.closest("form").submit();
+            var text = $("#"+id).Editor('getText');
+            if(text != '')
+            {
+                $("#"+id).text(text);
+                $("#"+id).Editor('setText','');
+                $this.closest("form").find(".jsTextEditor").closest(".textarea").find(".error").remove();
+                $this.closest("form").submit();
+
+            }
+            else
+            {
+                $this.closest("form").find(".jsTextEditor").closest(".textarea").append("<div class='error text-danger'>This field cannot be left empty</div>");
+            }
         });
     }).addClass("xltriggered");
     $('.btnCommentCancel'+so).each(function() {
@@ -54,11 +64,56 @@ function xload(flag)
             return false;
         });
     }).addClass("xltriggered");
+    $('.jsQuotePost' + so).each(function(e) {
+        $(this).click(function(){
+            var postid = $(this).data('postid');
+            var text = $(".jsCommentContent-"+postid).html();
+            var user = "<a href='#Comment-"+postid+"'>@"+$(".jsCommentContentUser-"+postid).html()+"</a>";
+            var content = "<blockquote>"+user+" said: <br>"+text+"</blockquote><br>";
+            $("#postdata").Editor('setText',content);
+            $("html,body").animate({scrollTop: $('.clsPostCommentBlock').offset().top - 30});
+            return false;
+        });
+    }).addClass("xltriggered");
+    $('.jsLikePost' + so).each(function(e) {
+        $(this).click(function(){
+            var postid = $(this).data('postid');
+            $this = $(this);
+            $.ajax({
+                url: "/forum/posts/like/"+postid,
+            }).done(function(data) {
+                if(data == "liked")
+                {
+                    $this.html("<i class='fa fa-thumbs-up'></i> Liked");
+                }
+                else if(data == "unliked")
+                {   
+                    $this.html("<i class='fa fa-thumbs-o-up'></i> Like");
+                }
+            });
+            return false;
+        });
+    }).addClass("xltriggered");
+    $('.jsCloseDiscussion' + so).each(function(e) {
+        $(this).click(function(){
+            var slug = $(this).data('slug');
+            alert(slug);
+            $this = $(this);
+            $.ajax({
+                url: "/forum/posts/close/"+slug,
+            }).done(function(data) {
+                window.location.reload()
+            });
+            return false;
+        });
+    }).addClass("xltriggered");
+    
     $('.jsTextEditor' + so).each(function(e) {
         html = $(this).text();  
         //editor = $(this).Editor();
         id = $(this).attr("id");
-        $("#"+id).Editor({'fonts':false,'styles':false,'font_size':false,'undo':false, 'redo':false,'insert_link':false, 'unlink':false,  'insert_table':false,'print':false, 'rm_format':false, 'select_all':false, 'source':false,'togglescreen':false,'strikeout':false, 'hr_line':false, 'splchars':false,'height':'200px'});
+        $("#"+id).Editor({'undo':false, 'redo':false,
+            'insert_img':false, 'insert_table':false,'print':false, 'rm_format':false, 'select_all':false, 'source':false,'togglescreen':false,'strikeout':false, 'hr_line':false, 'splchars':false,'block_quote':false});
         $("#"+id).Editor('setText',html);
         //$("#"+id).Editor({'advancedoptions':false});
         // $("#"+id).Editor({'textformats':false});
@@ -68,6 +123,10 @@ function xload(flag)
 }
 $dc.ready(function($) {
     xload(true);
+    if($(window.location.hash).length > 0)
+    {
+        $("html,body").animate({scrollTop: $(window.location.hash).offset().top - 30});
+    }
 }).ajaxStop(function() {
     xload(true);
 });

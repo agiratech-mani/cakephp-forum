@@ -1,5 +1,5 @@
 <div class="users form large-9 medium-8 columns content">
-    <h3><?= __('Edit Forum Topic') ?></h3>
+    <h3><?= $title ?></h3>
     <hr>
     <div class="col-md-8">
         <?= $this->Form->create($forumTopic,['class'=>'form-horizontal','type'=>'POST']) ?>
@@ -24,6 +24,7 @@
                 </div>
             </div>
             <?= $this->Form->button('Submit',['class'=>"btn btn-m btn-success btn-inline  pull-right"]) ?>
+            <?= $this->Html->link('Cancel',['action'=>'index'],['class'=>'btn btn-default btn-inline  pull-right mr-10']) ?>
         </fieldset>
         <?= $this->Form->end() ?>
     </div>

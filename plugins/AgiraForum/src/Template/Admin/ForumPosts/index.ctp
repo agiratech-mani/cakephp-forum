@@ -1,5 +1,5 @@
 <div class="users index large-9 medium-8 columns content">
-    <h3><?php echo __('Contents'); $this->assign('title', __('Contents')); ?></h3>
+    <h3><?php echo $title; ?></h3>
     <hr>
     <div class="clearfix">
        <?php //echo $this->Html->link('<i class="fa fa-fw fa-plus"></i> '.__('Add'), ['controller' => 'forumForums', 'action' => 'add'],['escape' => false,'class'=>'pull-right mar5 btn btn-info btn-m']) ?>
@@ -43,9 +43,9 @@
                     ?>
                 </td>
                 
-                <td><?= h($forumPost->created) ?></td>
-                <td><?= h($forumPost->modified) ?></td>
-                <td class="actions">
+                <td><?= $this->Forum->date($forumPost->created) ?></td>
+                <td><?= $this->Forum->date($forumPost->modified) ?></td>
+                <td class="actions text-center">
                     <?php echo $this->Html->link('<i class="fa fa-fw fa-pencil"></i> ', ['action' => 'edit', $forumPost->id],['escape'=>false]) ?>
                     <?php
                     if($forumPost->is_original != 1)

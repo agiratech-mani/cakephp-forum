@@ -10,7 +10,7 @@
     <meta name="author" content="">
     <link rel="icon" href="favicon-transparent.png" type="image/x-icon">
 
-    <title>Admin: <?= $this->fetch("title") ?></title>
+    <title>Admin: <?php echo (isset($title)?$title:$this->fetch("title")); ?></title>
 
     <!-- Bootstrap Core CSS -->
     <?= $this->Html->css('bootstrap.min.css') ?>
@@ -42,7 +42,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="index.html">Forum Admin</a>
+                <span class="navbar-brand" href="/">Forum Admin</span>
             </div>
             <!-- Top Menu Items -->
             <ul class="nav navbar-right top-nav">

@@ -63,7 +63,7 @@
             {
             ?>
                 <tr>
-                    <td colspan="5" class="text-center">
+                    <td colspan="6" class="text-center">
                         <p>No forum availbles.</p>
                     </td>
                 </tr>
@@ -72,5 +72,23 @@
             ?>
             </tbody>
         </table>
+    </div>
+    <div class="clearfix">
+        <div class="paginator pull-right">
+            <div class="clearfix">
+                <div class="pull-left pagination pagination-counter">
+                <p><?= $this->Paginator->counter(['format' => __('Page {{page}} of {{pages}}')]) ?></p>
+                </div>
+                <div class="pull-left">
+                <ul class="pagination">
+                    <?= $this->Paginator->first('<<') ?>
+                    <?= $this->Paginator->prev('<') ?>
+                    <?= $this->Paginator->numbers() ?>
+                    <?= $this->Paginator->next('>') ?>
+                    <?= $this->Paginator->last('>>') ?>
+                </ul>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

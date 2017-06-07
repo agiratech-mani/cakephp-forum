@@ -24,7 +24,8 @@
                     </div>
                     
                     <!-- Change this to a button or input when using this as a form -->
-                    <?= $this->Form->button('Submit',['class'=>"btn btn-lg btn-success btn-line pull-right"]) ?>
+                    <?= $this->Form->button('Submit',['class'=>"btn btn-success btn-line pull-right"]) ?>
+                    <?= $this->Html->link('Cancel',['controller'=>'Users','action'=>'index'],['escape'=>false,'class'=>' mr-10 btn btn-default pull-right ']) ?>
                 </fieldset>
             <?= $this->Form->end() ?>
     </div>

@@ -44,6 +44,11 @@ class ForumCategoriesTable extends Table
             'foreignKey' => 'forum_category_id',
             'className' => 'AgiraForum.ForumTopics'
         ]);
+        $this->addBehavior('Sluggable',[
+            'field' => 'name',
+            'slug' => 'slug',
+            'replacement' => '-',
+        ]);
     }
 
     /**

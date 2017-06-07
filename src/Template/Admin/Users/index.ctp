@@ -15,6 +15,7 @@
                 <th><?= $this->Paginator->sort('username','Username') ?></th>
                 <th><?= $this->Paginator->sort('email','Email') ?></th>
                 <th><?= $this->Paginator->sort('role','Role') ?></th>
+                <th><?= $this->Paginator->sort('active','Status?') ?></th>
                 <th><?= $this->Paginator->sort('created','Created') ?></th>
                 <th>Actions</th>
             </tr>
@@ -25,11 +26,12 @@
                 <td><?= $this->Number->format($user->id) ?></td>
                 <td><?= h($user->first_name) ?></td>
                 <td><?= h($user->last_name) ?></td>
-                <td><?= h($user->username) ?></td>
+                <td><?= $this->Html->link($user->username, ['action' => 'view', $user->id],['escape'=>false]) ?></td>
                 <td><?= h($user->email) ?></td>
                 <td><?= h($user->role) ?></td>
+                <td><?= h($user->active?'Active':'Deactive') ?></td>
                 <td><?= h($user->created) ?></td>
-                <td class="actions">
+                <td class="actions text-center">
                     <?= $this->Html->link('<i class="fa fa-fw fa-pencil"></i> ', ['action' => 'edit', $user->id],['escape'=>false]) ?>
                     <?php if($loguser['id'] != $user->id): ?>
                     <?= $this->Form->postLink('<i class="fa fa-fw fa-remove"></i> ', ['action' => 'delete', $user->id], ['confirm' => __('Are you sure you want to delete # {0}?', $user->username),'escape'=>false]) ?>

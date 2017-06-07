@@ -40,7 +40,11 @@ class ForumTopicsTable extends Table
         $this->primaryKey('id');
 
         $this->addBehavior('Timestamp');
-
+        $this->addBehavior('Sluggable',[
+            'field' => 'name',
+            'slug' => 'slug',
+            'replacement' => '-',
+        ]);
         $this->belongsTo('ForumCategories', [
             'foreignKey' => 'forum_category_id',
             'joinType' => 'INNER',

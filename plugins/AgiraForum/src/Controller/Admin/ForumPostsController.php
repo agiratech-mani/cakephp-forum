@@ -7,6 +7,8 @@ class ForumPostsController extends AppController
 {
     public function index($forumId = NULL)
     {
+        $forumForum = $this->ForumPosts->ForumForums->get($forumId);
+
         $this->paginate = [
             'conditions' => [
                 'ForumPosts.forum_forum_id' => $forumId,
@@ -16,8 +18,8 @@ class ForumPostsController extends AppController
             'order'=>['ForumPosts.id' => 'asc']
         ];
         $forumPosts = $this->paginate($this->ForumPosts);
-
-        $this->set(compact('forumPosts'));
+        $title = "Contents - ".$forumForum->title;
+        $this->set(compact('forumPosts','title'));
         $this->set('_serialize', ['forumPosts']);
     }
     public function edit($id = null)

@@ -19,33 +19,11 @@ class ForumCategoriesController extends AppController
     public function index()
     {
         $forumCategories = $this->paginate($this->ForumCategories);
-
+        $title = "Forum Categories";
+        $this->set("title",$title);
         $this->set(compact('forumCategories'));
         $this->set('_serialize', ['forumCategories']);
     }
-
-    /**
-     * View method
-     *
-     * @param string|null $id Forum Category id.
-     * @return \Cake\Network\Response|null
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function view($id = null)
-    {
-        $forumCategory = $this->ForumCategories->get($id, [
-            'contain' => ['ForumTopics']
-        ]);
-
-        $this->set('forumCategory', $forumCategory);
-        $this->set('_serialize', ['forumCategory']);
-    }
-
-    /**
-     * Add method
-     *
-     * @return \Cake\Network\Response|null Redirects on successful add, renders view otherwise.
-     */
     public function add()
     {
         $forumCategory = $this->ForumCategories->newEntity();
@@ -58,6 +36,8 @@ class ForumCategoriesController extends AppController
             }
             $this->Flash->error(__('The forum category could not be saved. Please, try again.'));
         }
+        $title = "Add Forum Category";
+        $this->set("title",$title);
         $this->set(compact('forumCategory'));
         $this->set('_serialize', ['forumCategory']);
     }
@@ -83,6 +63,8 @@ class ForumCategoriesController extends AppController
             }
             $this->Flash->error(__('The forum category could not be saved. Please, try again.'));
         }
+        $title = "Edit Forum Category - ".$forumCategory->name;
+        $this->set("title",$title);
         $this->set(compact('forumCategory'));
         $this->set('_serialize', ['forumCategory']);
     }

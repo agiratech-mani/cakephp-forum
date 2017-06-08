@@ -11,11 +11,11 @@ use Cake\ORM\TableRegistry;
 class ForumForumsController extends AppController
 {
 
-    /**
-     * Index method
-     *
-     * @return \Cake\Network\Response|null
-     */
+    public function initialize()
+    {
+        parent::initialize();
+        $this->Auth->allow(['index','view']);
+    }
     public function index()
     {
         $this->paginate = [

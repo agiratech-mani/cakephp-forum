@@ -219,8 +219,12 @@ Type::build('timestamp')
  * Only try to load DebugKit in development mode
  * Debug Kit should not be installed on a production system
  */
+//Configure::write('Routing.prefixes', array('admin'));
+
 if (Configure::read('debug')) {
     Plugin::load('DebugKit', ['bootstrap' => true]);
 }
 
 Plugin::load('AgiraForum', ['bootstrap' => false, 'routes' => true]);
+
+Plugin::load('ADmad/HybridAuth', ['bootstrap' => true, 'routes' => true]);

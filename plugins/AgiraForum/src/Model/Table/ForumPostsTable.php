@@ -4,7 +4,10 @@ namespace AgiraForum\Model\Table;
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
+use Cake\Event\Event;
+use ArrayObject;
 use Cake\Validation\Validator;
+use Cake\Datasource\EntityInterface;
 
 /**
  * ForumPosts Model
@@ -98,5 +101,10 @@ class ForumPostsTable extends Table
         $rules->add($rules->existsIn(['user_id'], 'Users'));
 
         return $rules;
+    }
+    public function beforeSave(Event $event, EntityInterface $entity,ArrayObject $arrayObj)
+    {
+        //parent::beforeSave($event,$entity,$arrayObj);
+        $entity->set('modified_by',$_SESSION['Auth']['User']['id']);
     }
 }

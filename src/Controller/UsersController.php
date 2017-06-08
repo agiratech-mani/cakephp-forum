@@ -15,13 +15,6 @@ class UsersController extends AppController
         parent::initialize();
         $this->Auth->allow(['logout', 'register']);
     }
-    public function index()
-    {
-        $users = $this->paginate($this->Users);
-
-        $this->set(compact('users'));
-        $this->set('_serialize', ['users']);
-    }
     public function register()
     {
         $user = $this->Users->newEntity();
@@ -69,6 +62,7 @@ class UsersController extends AppController
     }
     public function login()
     {
+        $this->set('title','Login');
         if ($this->request->is('post')) {
             $user = $this->Auth->identify();
             
@@ -76,13 +70,13 @@ class UsersController extends AppController
                 if($user['active'] == 1)
                 {
                     $this->Auth->setUser($user);
-                    if($user['role'] == 'admin')
+                    if($user['role'] == 'admin' || $user['role'] ==  'moderator')
                     {
                         return $this->redirect(['action' => 'index','prefix'=>'admin']);
                     }
                     else
                     {
-                        return $this->redirect($this->Auth->redirectUrl());
+                        return $this->redirect(['controller' => 'Users', 'action' => 'edit','prefix'=>false]);
                     }
                 }
                 else
@@ -95,7 +89,6 @@ class UsersController extends AppController
             {
                 $this->Flash->error('Your username or password is incorrect.');
             }
-            
         }
     }
 

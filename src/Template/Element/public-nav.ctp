@@ -8,7 +8,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#">Agira Forum</a>
+                <a class="navbar-brand" href="/">Agira Forum</a>
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse  navbar-right" id="bs-example-navbar-collapse-1">
@@ -25,6 +25,16 @@
                     </li>
                    
                     <?php else: ?>
+                    <?php if($authUser['role'] == 'admin'){ ?>
+                   
+                        <?= $this->Html->link(__('Admin Panel'), ['controller' => 'Users', 'action' => 'index','prefix'=>'admin'],['escape' => false]) ?>
+                    </li>
+                    <?php } else if($authUser['role'] == 'moderator'){  ?>
+                     <li>
+                        <?= $this->Html->link(__('Admin Panel'), ['controller' 
+                        => 'ForumForums', 'action' => 'index','prefix'=>'admin','plugin'=>'AgiraForum'],['escape' => false]) ?>
+                    </li>
+                    <?php } ?>
                     <li>
                         <?= $this->Html->link(__('Forum'), ['controller' => 'ForumForums', 'action' => 'index','prefix'=>false,'plugin'=>'AgiraForum'],['escape' => false]) ?>
                     </li>

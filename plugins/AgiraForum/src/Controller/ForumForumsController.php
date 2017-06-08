@@ -20,7 +20,8 @@ class ForumForumsController extends AppController
     {
         $this->paginate = [
             'contain' => ['ForumTopics', 'Users'],
-            'conditions' => ['ForumForums.status in'=>[1,3]]
+            'conditions' => ['ForumForums.status in'=>[1,3]],
+            'order' => ['ForumForums.created'=>'desc']
         ];
         $forumForums = $this->paginate($this->ForumForums);
         $title = "Forums";

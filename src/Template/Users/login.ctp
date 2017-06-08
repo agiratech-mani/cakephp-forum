@@ -21,6 +21,12 @@
                     <?= $this->Form->button('Login',['class'=>"btn btn-lg btn-success btn-block"]) ?>
                 </fieldset>
             <?= $this->Form->end() ?>
+            <?php 
+            echo $this->Form->postLink(
+                'Login with Facebook',
+                ['controller' => 'Users', 'action' => 'login', '?' => ['provider' => 'Facebook']]
+            );
+            ?>
         </div>
     </div>
 </div>

@@ -17,9 +17,9 @@ namespace App\Controller;
 use Cake\Controller\Controller;
 use Cake\Event\Event;
 use Cake\I18n\Time;
-        use Cake\I18n\Date;
-        use Cake\I18n\FrozenTime;
-        use Cake\I18n\FrozenDate;
+use Cake\I18n\Date;
+use Cake\I18n\FrozenTime;
+use Cake\I18n\FrozenDate;
 /**
  * Application Controller
  *
@@ -53,6 +53,25 @@ class AppController extends Controller
                         'username' => 'username',
                         'password' => 'password'
                     ]
+                ],
+                'ADmad/HybridAuth.HybridAuth' => [
+                    // All keys shown below are defaults
+                    'fields' => [
+                        'provider' => 'provider',
+                        'openid_identifier' => 'openid_identifier',
+                        'email' => 'email'
+                    ],
+
+                    'profileModel' => 'ADmad/HybridAuth.SocialProfiles',
+                    'profileModelFkField' => 'user_id',
+
+                    'userModel' => 'Users',
+
+                    // The URL Hybridauth lib should redirect to after authentication.
+                    // If no value is specified you are redirect to this plugin's
+                    // HybridAuthController::authenticated() which handles persisting
+                    // user info to AuthComponent and redirection.
+                    'hauth_return_to' => null
                 ]
             ],
             'loginAction' => [
@@ -63,8 +82,7 @@ class AppController extends Controller
             ],
             // 'loginRedirect' => [
             //     'controller' => 'Users',
-            //     'action' => 'index',
-            //     'prefix' => false
+            //     'action' => 'index'
             // ],
             'logoutRedirect' => [
                 'controller' => 'Users',
@@ -74,14 +92,14 @@ class AppController extends Controller
             'authorize' => 'Controller',
             'unauthorizedRedirect' => $this->referer() // If unauthorized, return them to page they were just on
         ]);
-        if($this->Auth->user('role') == 'admin')
-        {
-            $this->Auth->loginRedirect = array('controller' => 'Users', 'action' => 'index','prefix'=>'admin');
-        }
-        else
-        {
-            $this->Auth->loginRedirect = array('controller' => 'Users', 'action' => 'edit','prefix'=>false);
-        }
+        // if($this->Auth->user('role') == 'admin' || $this->Auth->user('role') == 'moderator')
+        // {
+        //     $this->Auth->loginRedirect = array('controller' => 'Users', 'action' => 'index','prefix'=>'admin');
+        // }
+        // else
+        // {
+        //     $this->Auth->loginRedirect = array('controller' => 'Users', 'action' => 'edit','prefix'=>false);
+        // }
         // Allow the display action so our pages controller
         // continues to work.
         $this->Auth->allow(['display']);
@@ -104,11 +122,11 @@ class AppController extends Controller
     public function isAuthorized($user)
     {
         $action = $this->request->param('action');
-
+        $controller = $this->request->param('controller');
 
         if(isset($this->request->prefix) && ($this->request->prefix == 'admin')){
             if($this->Auth->user()){
-                if($this->Auth->user('role') == 'admin'){
+                if($this->Auth->user('role') == 'admin' || $this->Auth->user('role') == 'moderator'){
                     return true;
                 }else{
                     return false;

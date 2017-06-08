@@ -9,6 +9,7 @@
             <tr class="thead-inverse">
                 <th class="col-md-5"><?= $this->Paginator->sort('content','Content') ?></th>
                 <th><?= $this->Paginator->sort('user_id','Posted By') ?></th>
+                <th><?= $this->Paginator->sort('like_count','Likes') ?></th>
                 <th><?= $this->Paginator->sort('status','Status') ?></th>
                 <th><?= $this->Paginator->sort('created','Created') ?></th>
                 <th><?= $this->Paginator->sort('modified','Updated') ?></th>
@@ -26,6 +27,7 @@
                 ]) ?>
                 </td>
                 <td><?= $forumPost->has('user') ? $forumPost->user->username : '' ?></td>
+                <td><?= $this->Number->format($forumPost->like_count) ?>
                 <td>
                     <?php
                         if($forumPost->status == 1)

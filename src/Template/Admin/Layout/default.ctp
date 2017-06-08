@@ -9,7 +9,11 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="icon" href="favicon-transparent.png" type="image/x-icon">
-
+    <?php if($authUser['role'] == 'moderator'): ?>
+        <title>Moderator: <?php echo (isset($title)?$title:$this->fetch("title")); ?></title>
+    <?php else: ?>
+        <title>Admin: <?php echo (isset($title)?$title:$this->fetch("title")); ?></title>
+    <?php endif; ?>
     <title>Admin: <?php echo (isset($title)?$title:$this->fetch("title")); ?></title>
 
     <!-- Bootstrap Core CSS -->
@@ -42,10 +46,17 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <span class="navbar-brand" href="/">Forum Admin</span>
+                <?php if($authUser['role'] == 'moderator'): ?>
+                    <span class="navbar-brand" href="/">Forum Moderator</span>
+                <?php else: ?>
+                    <span class="navbar-brand" href="/">Forum Admin</span>
+                <?php endif; ?>
             </div>
             <!-- Top Menu Items -->
             <ul class="nav navbar-right top-nav">
+                <li>
+                    <?= $this->Html->link(__('Home'), ['controller' => 'Default', 'action' => 'index','plugin'=>false,'prefix'=>false],['escape' => false]) ?>
+                </li>
                 <li class="dropdown">
                     <?php
                         $loguser = $this->request->session()->read('Auth.User');
@@ -71,10 +82,15 @@
                     <!--<li class="active">
                         <a href="index.html"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
                     </li>-->
+                    <?php if($authUser['role'] == 'admin'): ?>
                     <li>
                         <?= $this->Html->link(__('Users'), ['controller' => 'Users', 'action' => 'index','plugin'=>false],['escape' => false]) ?>
                         
                     </li>
+                    ]<?php endif; ?>
+                    <li>
+                        <?= $this->Html->link(__('Forums'), ['controller' => 'ForumForums', 'action' => 'index','plugin'=>'AgiraForum'],['escape' => false]) ?>
+                    </li>   
                     <li>
                         <?= $this->Html->link(__('Forum Categories'), ['controller' => 'ForumCategories', 'action' => 'index','plugin'=>'AgiraForum'],['escape' => false]) ?>
                         
@@ -85,9 +101,7 @@
                     <li>
                         <?= $this->Html->link(__('Forum Tags'), ['controller' => 'ForumTags', 'action' => 'index','plugin'=>'AgiraForum'],['escape' => false]) ?>
                     </li>
-                    <li>
-                        <?= $this->Html->link(__('Forums'), ['controller' => 'ForumForums', 'action' => 'index','plugin'=>'AgiraForum'],['escape' => false]) ?>
-                    </li>
+                    
                 </ul>
             </div>
             <!-- /.navbar-collapse -->

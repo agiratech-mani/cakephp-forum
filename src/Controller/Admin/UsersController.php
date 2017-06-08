@@ -2,9 +2,37 @@
 namespace App\Controller\Admin;
 
 use App\Controller\AppController;
+use Cake\Event\Event;
 
 class UsersController extends AppController
 {
+    public function isAuthorized($user)
+    {
+        $action = $this->request->param('action');
+        $controller = $this->request->param('controller');
+        if(isset($this->request->prefix) && ($this->request->prefix == 'admin')){
+            if($this->Auth->user()){
+                if($this->Auth->user('role') == 'admin'){
+                    return true;
+                }
+                else 
+                if (in_array($action, ['edit','changePassword'])) 
+                {
+                    return true;
+                }
+                else
+                {
+                    return $this->redirect(['controller' => 'ForumForums', 'action' => 'index','prefix'=>'admin','plugin'=>'AgiraForum']);
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
+        return parent::isAuthorized($user);
+    }
     public function index()
     {
         $users = $this->paginate($this->Users);

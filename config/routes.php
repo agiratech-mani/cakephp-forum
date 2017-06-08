@@ -43,14 +43,6 @@ use Cake\Routing\Route\DashedRoute;
  */
 Router::defaultRouteClass(DashedRoute::class);
 
-Router::scope(
-    '/bookmarks',
-    ['controller' => 'Bookmarks'],
-    function ($routes) {
-        $routes->connect('/tagged/*', ['action' => 'tags']);
-    }
-);
-
 Router::scope('/', function (RouteBuilder $routes) {
     /**
      * Here, we are connecting '/' (base path) to a controller called 'Pages',
@@ -87,6 +79,10 @@ Router::prefix('admin',function ($routes) {
     $routes->connect('/', ['controller' => 'Users', 'action' => 'index']);
     $routes->fallbacks(DashedRoute::class);
 });
+// Router::scope('/moderator', ['prefix' => 'admin'], function (RouteBuilder $routes) {
+//     $routes->connect('/', ['controller' => 'Users', 'action' => 'index']);
+//     $routes->fallbacks(DashedRoute::class);
+// });
 /**
  * Load all plugin routes.  See the Plugin documentation on
  * how to customize the loading of plugin routes.

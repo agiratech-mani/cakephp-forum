@@ -21,12 +21,24 @@
                     <?= $this->Form->button('Login',['class'=>"btn btn-lg btn-success btn-block"]) ?>
                 </fieldset>
             <?= $this->Form->end() ?>
+            <br>
+            <h4 class="text-center">OR</h4>
+            <div class="social-buttons">
+            <span>Login via </span>
+            <br>
             <?php 
             echo $this->Form->postLink(
-                'Login with Facebook',
-                ['controller' => 'Users', 'action' => 'login', '?' => ['provider' => 'Facebook']]
+                '<i class="fa fa-facebook"></i> Facebook',
+                ['controller' => 'Users', 'action' => 'login', '?' => ['provider' => 'Facebook']],['escape'=>false,'class'=>'btn btn-fb']
             );
             ?>
+            <?php 
+            echo $this->Form->postLink(
+                '<i class="fa fa-twitter"></i> Twitter',
+                ['controller' => 'Users', 'action' => 'login', '?' => ['provider' => 'Twitter']],['escape'=>false,'class'=>'btn btn-tw']
+            );
+            ?>
+            </div>
         </div>
     </div>
 </div>

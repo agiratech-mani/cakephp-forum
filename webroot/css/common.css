@@ -25,3 +25,22 @@
 {
  margin-right:10px;
 }
+.btn-fb {
+    color: #fff;
+    background-color: #3b5998;
+}
+.btn-fb:hover {
+    color: #fff;
+    background-color: #496ebc;
+}
+.btn-tw {
+    color: #fff;
+    background-color: #55acee;
+}
+.btn-tw:hover {
+    color: #fff;
+    background-color: #59b5fa;
+}
+.social-buttons a {
+    width: 49%;
+}

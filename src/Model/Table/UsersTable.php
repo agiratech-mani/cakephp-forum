@@ -156,6 +156,11 @@ class UsersTable extends Table
         // Make sure here that all the required fields are actually present
 
         $user = $this->newEntity(['email' => $profile->email]);
+        $user = $this->newEntity(['first_name' => $profile->first_name]);
+        $user = $this->newEntity(['last_name' => $profile->last_name]);
+        $user = $this->newEntity(['role' => 'user']);
+        $user = $this->newEntity(['username' => $profile->email]);
+        $user = $this->newEntity(['active' => 1]);
         $user = $this->save($user);
 
         if (!$user) {

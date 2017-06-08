@@ -17,12 +17,13 @@ return [
                     'secret' => '6cfdedf0f211b7a0fe614bafd1bd7327'
                 ],
                 'scope' => 'email, user_about_me, user_birthday, user_hometown'
+                //'email, user_about_me, user_birthday, user_hometown'
             ],
             'Twitter' => [
                 'enabled' => true,
                 'keys' => [
-                    'key' => '<twitter-key>',
-                    'secret' => '<twitter-secret>'
+                    'key' => 'ruYoDJPOse78FpA3oN5dYvKGI',
+                    'secret' => 'zXlkpJkUy0kX2JPIADCf31Y9qUJzDUCTxmwQK6F4C8I2rbTAf7'
                 ],
                 'includeEmail' => true // Only if your app is whitelisted by Twitter Support
             ]

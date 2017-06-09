@@ -2,8 +2,8 @@
 	<h3><?= $title ?></h3>
   <hr>
   <div class="pull-right">
-  		 <?= $this->Html->link('Back',['controller'=>'Users','action'=>'index'],['escape'=>false,'class'=>'btn btn-default pull-right 
-  		 <?= $this->Html->link('Edit',['controller'=>'Users','action'=>'edit',$user->id],['escape'=>false,'class'=>'btn btn-primary']) ?>
+  		 <?= $this->Html->link('Back',['controller'=>'Users','action'=>'index'],['escape'=>false,'class'=>'btn btn-default pull-right ']) ?> 
+  		 <?= $this->Html->link('Edit',['controller'=>'Users','action'=>'edit',$user->id],['escape'=>false,'class'=>'btn btn-primary mr-10']) ?>
   </div>
   <div  class="col-md-7">
   	

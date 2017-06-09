@@ -37,6 +37,8 @@ return [
      *   paths for plugins, view templates and locale files respectively.
      */
     'App' => [
+        'sitename' => 'Agiratech',
+        'admin_email' => 'mani@agiratech.com',
         'namespace' => 'App',
         'encoding' => env('APP_ENCODING', 'UTF-8'),
         'defaultLocale' => env('APP_DEFAULT_LOCALE', 'en_US'),
@@ -183,11 +185,12 @@ return [
             'host' => 'ssl://smtp.gmail.com',
             'port' => 465,
             'timeout' => 30,
-            'username' => 'mani@agiratech.com',
-            'password' => 'm@ni1990',
+            'username' => 'sudeepdecker',
+            'password' => 'decker1234',
             'client' => null,
             'tls' => false,
             'url' => env('EMAIL_TRANSPORT_DEFAULT_URL', null),
+
         ],
     ],
 
@@ -203,7 +206,7 @@ return [
     'Email' => [
         'default' => [
             'transport' => 'default',
-            'from' => 'you@localhost',
+            'from' => 'no-reply@agiratech.com',
             //'charset' => 'utf-8',
             //'headerCharset' => 'utf-8',
         ],
@@ -230,7 +233,7 @@ return [
              */
             //'port' => 'non_standard_port_number',
             'username' => 'root',
-            'password' => 'root',
+            'password' => 'roota',
             'database' => 'forum',
             'encoding' => 'utf8',
             'timezone' => 'UTC',

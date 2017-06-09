@@ -4,6 +4,7 @@ namespace App\Controller;
 use App\Controller\AppController;
 use Cake\Routing\Router;
 use Cake\Mailer\Email;
+use Cake\Core\Configure;
 /**
  * Users Controller
  *
@@ -14,15 +15,20 @@ class UsersController extends AppController
     public function initialize()
     {
         parent::initialize();
-        $this->Auth->allow(['logout', 'register','password','reset']);
+        $this->Auth->allow(['logout', 'register','password','reset','confirm']);
     }
     public function register()
     {
         $user = $this->Users->newEntity();
         if ($this->request->is('post')) {
+            $confirmation_key = uniqid();
+            $this->request->data['confirmation_key'] = $confirmation_key;
             $user = $this->Users->patchEntity($user, $this->request->data);
             if ($this->Users->save($user)) {
-                $this->Flash->success(__('The user has been saved.'));
+                $url = Router::Url(['controller' => 'users', 'action' => 'confirm'], true) . '/' . $confirmation_key;
+                $this->sendActivationEmail($url, $user);
+                $this->sendNewUserEmail($user);
+                $this->Flash->success(__('You have registered successfully. Please check your mail for activation mail.'));
                 return $this->redirect(['action' => 'login']);
             }
             $this->Flash->error(__('The user could not be saved. Please, try again.'));
@@ -68,7 +74,7 @@ class UsersController extends AppController
             $user = $this->Auth->identify();
             
             if ($user) {
-                if($user['active'] == 1)
+                if($user['active'] == 1 && $user['confirmed'] == 1)
                 {
                     $this->Auth->setUser($user);
                     if($user['role'] == 'admin' || $user['role'] ==  'moderator')
@@ -83,7 +89,14 @@ class UsersController extends AppController
                 else
                 {
                     $this->Auth->logout();
-                    $this->Flash->error('Your account is inactived please contact admin.');
+                    if($user['confirmed'] == 0)
+                    {
+                        $this->Flash->error('Your email is not verified. Please verify the email.');
+                    }
+                    else
+                    {
+                        $this->Flash->error('Your account is inactived please contact admin.');
+                    }
                 }
             }
             else
@@ -148,22 +161,6 @@ class UsersController extends AppController
             }
         }
     }
-
-    private function sendResetEmail($url, $user) {
-        $email = new Email();
-        $email->template('resetpw');
-        $email->emailFormat('both');
-        $email->from('no-reply@naidim.org');
-        $email->to($user->email, $user->first_name);
-        $email->subject('Reset your password');
-        $email->viewVars(['url' => $url, 'username' => $user->username]);
-        if ($email->send()) {
-            $this->Flash->success(__('Check your email for your reset password link'));
-        } else {
-            $this->Flash->error(__('Error sending email: ') . $email->smtpError);
-        }
-    }
-
     public function reset($passkey = null) {
         if ($passkey) {
             $query = $this->Users->find('all', ['conditions' => ['passkey' => $passkey, 'timeout >' => time()]]);
@@ -175,7 +172,7 @@ class UsersController extends AppController
                     $this->request->data['timeout'] = null;
                     $user = $this->Users->patchEntity($user, $this->request->data);
                     if ($this->Users->save($user)) {
-                        $this->Flash->set(__('Your password has been updated.'));
+                        $this->Flash->success(__('Your password has been updated.'));
                         return $this->redirect(array('action' => 'login'));
                     } else {
                         $this->Flash->error(__('The password could not be updated. Please, try again.'));
@@ -188,6 +185,34 @@ class UsersController extends AppController
             unset($user->password);
             $this->set(compact('user'));
         } else {
+            $this->redirect('/');
+        }
+    }
+    public function confirm($key = null) {
+        if ($key) {
+            $query = $this->Users->find('all', ['conditions' => ['confirmation_key' => $key]]);
+            $user = $query->first();
+            if ($user) {
+                $user->confirmation_key = null;
+                $user->active = 1;
+                $user->confirmed = 1;
+                if($this->Users->save($user))
+                {
+                    $this->Auth->setUser($user);
+                    $this->Flash->success(__('Your account activated successfully.'));
+                    return $this->redirect(array('action' => 'edit'));
+                }
+                else {
+                    $this->Flash->error('Invalid url. Please check your email or try again');
+                    $this->redirect(['action' => 'login']);
+                }
+            }
+            else {
+                $this->Flash->error('Invalid url. Please check your email or try again');
+                $this->redirect(['action' => 'login']);
+            }
+        }
+        else {
             $this->redirect('/');
         }
     }

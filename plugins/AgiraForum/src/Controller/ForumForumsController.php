@@ -18,9 +18,10 @@ class ForumForumsController extends AppController
     }
     public function index()
     {
+        
         $this->paginate = [
             'contain' => ['ForumTopics', 'Users'],
-            'conditions' => ['ForumForums.status in'=>[1,3]],
+            'conditions' => ['ForumForums.status in'=>[1,3],'ForumForums.deleted != '=> 1],
             'order' => ['ForumForums.created'=>'desc']
         ];
         $forumForums = $this->paginate($this->ForumForums);
@@ -50,14 +51,23 @@ class ForumForumsController extends AppController
                 'Users',
                 'conditions'=>['ForumPosts.status'=>1],
                 'ForumPostLikes'=>['conditions'=>['ForumPostLikes.user_id'=>$user_id]]
-            ],'ForumTags'])->first();
-        //$this->ForumForums->updateAll(array('hits'=>($forumForum->hits+1)), array('ForumForums.id'=>$forumForum->id));
-        $this->set('forumForum', $forumForum);
-        $post = $this->ForumForums->ForumPosts->newEntity();
-        $title = $forumForum->title;
-        $this->set('post', $post);
-        $this->set('title', $title);
-        $this->set('_serialize', ['forumForum']);
+            ],'ForumTags'])
+        ->where(['ForumForums.status in'=>[1,3],'ForumForums.deleted != '=> 1])->first();
+        if(!empty($forumForum))
+        {
+            $this->ForumForums->updateAll(array('hits'=>($forumForum->hits+1)), array('ForumForums.id'=>$forumForum->id));
+            $this->set('forumForum', $forumForum);
+            $post = $this->ForumForums->ForumPosts->newEntity();
+            $title = $forumForum->title;
+            $this->set('post', $post);
+            $this->set('title', $title);
+            $this->set('_serialize', ['forumForum']);
+        }
+        else
+        {
+            $this->Flash->error(__('This forum not availble.'));
+            return $this->redirect(['action' => 'index']);
+        }
     }
 
     /**
@@ -73,8 +83,11 @@ class ForumForumsController extends AppController
             $forumForum = $this->ForumForums->patchEntity($forumForum, $this->request->data,['associated' => ['ForumPosts','ForumTags']]);
             if ($this->ForumForums->save($forumForum,['associated' => ['ForumPosts','ForumTags']])) {
                 $this->Flash->success(__('The forum has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
+                $forum = $this->ForumForums->get($forumForum->id, [
+                   'contain' => ['Users','ForumTopics']
+                ]);
+                $this->sendAdminNewForumNotify($forum);
+                return $this->redirect(['action' => 'view',$forumForum->slug]);
             }
             $this->Flash->error(__('The forum could not be saved. Please, try again.'));
         }
@@ -136,8 +149,12 @@ class ForumForumsController extends AppController
                 {
                     $id = $forumPost->id;
                     $forumPost = $this->ForumForums->ForumPosts->get($id, [
-                        'contain' => ["Users"]
+                        'contain' => ["Users",'ForumForums'=>['Users']]
                     ]);
+                    if($this->Auth->user('id') != $forumPost->forum_forum->user_id)
+                    {
+                        $this->sendNewPostNotify($forumPost);    
+                    }
                     echo "new*";
                     //return "redirect*url";
                 }
@@ -204,7 +221,7 @@ class ForumForumsController extends AppController
         $user = $this->Auth->user();
         $this->paginate = [
             'contain' => ['ForumTopics', 'Users'],
-            'conditions' => ['ForumForums.user_id'=>$user['id']]
+            'conditions' => ['ForumForums.user_id'=>$user['id'],'ForumForums.deleted != '=> 1],
         ];
         $forumForums = $this->paginate($this->ForumForums);
         $title = "Forums";

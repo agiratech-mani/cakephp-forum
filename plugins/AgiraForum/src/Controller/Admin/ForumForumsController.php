@@ -19,7 +19,8 @@ class ForumForumsController extends AppController
     public function index()
     {
         $this->paginate = [
-            'contain' => ['ForumTopics', 'Users']
+            'contain' => ['ForumTopics', 'Users'],
+            'conditions'=>['ForumForums.deleted != '=> 1]
         ];
         $forumForums = $this->paginate($this->ForumForums);
         $title = "Forums";
@@ -34,8 +35,18 @@ class ForumForumsController extends AppController
         if(!empty($forumForum))
         {
             $forumForum->status = $status;
-            $ForumForums->save($forumForum);
-            $this->Flash->success(__('Forum discussion closed successfully.'));
+            if($ForumForums->save($forumForum))
+            {
+                $forum = $this->ForumForums->get($id,['contain'=>['Users']]);
+                
+                $this->sendForumClosedNotify($forum);
+                $this->Flash->success(__('Forum discussion closed successfully.'));
+            }
+            else
+            {
+                $this->Flash->success(__('Forum status couldn\'t be changed. Please try again later.'));
+            }
+            
         }
          return $this->redirect(['action' => 'index']);
     }
@@ -75,9 +86,6 @@ class ForumForumsController extends AppController
                 return $this->redirect(['action' => 'index']);
             }
             $this->Flash->error(__('The forum forum could not be saved. Please, try again.'));
-            echo "<pre>";
-            print_r($forumForum);
-            die;
         }
         $forumTopics = $this->ForumForums->ForumTopics->find('list', ['limit' => 200]);
         $tags = $this->ForumForums->ForumTags->find('list', ['limit' => 200]);
@@ -126,14 +134,24 @@ class ForumForumsController extends AppController
      */
     public function delete($id = null)
     {
-        $this->request->allowMethod(['post', 'delete']);
-        $forumForum = $this->ForumForums->get($id);
-        if ($this->ForumForums->delete($forumForum)) {
-            $this->Flash->success(__('The forum forum has been deleted.'));
-        } else {
-            $this->Flash->error(__('The forum forum could not be deleted. Please, try again.'));
+        $ForumForums = TableRegistry::get('ForumForums');
+        $forumForum = $ForumForums->get($id);
+        if(!empty($forumForum))
+        {
+            $forumForum->deleted = 1;
+            if($ForumForums->save($forumForum))
+            {
+                $forum = $this->ForumForums->get($id,['contain'=>['Users']]);
+                
+                $this->sendForumDeletedNotify($forum);
+                $this->Flash->success(__('Forum deleted successfully.'));
+            }
+            else
+            {
+                $this->Flash->success(__('Forum status couldn\'t be deleted. Please try again later.'));
+            }
+            
         }
-
         return $this->redirect(['action' => 'index']);
     }
 }

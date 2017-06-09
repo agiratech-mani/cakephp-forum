@@ -87,7 +87,7 @@
                         <?= $this->Html->link(__('Users'), ['controller' => 'Users', 'action' => 'index','plugin'=>false],['escape' => false]) ?>
                         
                     </li>
-                    ]<?php endif; ?>
+                    <?php endif; ?>
                     <li>
                         <?= $this->Html->link(__('Forums'), ['controller' => 'ForumForums', 'action' => 'index','plugin'=>'AgiraForum'],['escape' => false]) ?>
                     </li>   
@@ -101,7 +101,11 @@
                     <li>
                         <?= $this->Html->link(__('Forum Tags'), ['controller' => 'ForumTags', 'action' => 'index','plugin'=>'AgiraForum'],['escape' => false]) ?>
                     </li>
-                    
+                    <?php /* if($authUser['role'] == 'admin'): ?>
+                    <li>
+                        <?= $this->Html->link(__('Settings'), ['controller' => 'Settings', 'action' => 'index','plugin'=>false],['escape' => false]) ?>
+                    </li>
+                    <?php endif; */?>
                 </ul>
             </div>
             <!-- /.navbar-collapse -->

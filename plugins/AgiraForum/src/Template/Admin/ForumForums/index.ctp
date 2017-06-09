@@ -66,7 +66,7 @@
                     if($forumForum->status != 2)
                     {   
 
-                        echo $this->Form->postLink('<i class="fa fa-fw fa-trash"></i> ', ['changeStatus' => 'delete', $forumForum->id,2], ['confirm' => __('Are you sure you want to delete # {0}?', $forumForum->title),'escape'=>false,'title'=>'To delete the discussion']);
+                        echo $this->Form->postLink('<i class="fa fa-fw fa-trash"></i> ', ['action' => 'delete', $forumForum->id], ['confirm' => __('Are you sure you want to delete # {0}?', $forumForum->title),'escape'=>false,'title'=>'To delete the discussion']);
                     }
                     ?>
                 </td>

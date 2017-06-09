@@ -3,6 +3,9 @@ namespace App\Controller\Admin;
 
 use App\Controller\AppController;
 use Cake\Event\Event;
+use Cake\Routing\Router;
+use Cake\Mailer\Email;
+use Cake\Core\Configure;
 
 class UsersController extends AppController
 {
@@ -23,7 +26,6 @@ class UsersController extends AppController
                 else
                 {
                     return $this->redirect(['controller' => 'ForumForums', 'action' => 'index','prefix'=>'admin','plugin'=>'AgiraForum']);
-                    return false;
                 }
             }
             else
@@ -47,8 +49,12 @@ class UsersController extends AppController
         if ($this->request->is('post')) {
             $user = $this->Users->patchEntity($user, $this->request->data);
             if ($this->Users->save($user)) {
+                $confirmation_key = uniqid();
+                $user->confirmation_key = $confirmation_key;
+                $this->Users->save($user);
+                $url = Router::Url(['controller' => 'users', 'action' => 'confirm','prefix'=>false,'plugin'=>false], true) . '/' . $confirmation_key;
+                $this->sendUserCreatedEmail($user,$this->request->data['password'],$url);
                 $this->Flash->success(__('The user has been saved.'));
-
                 return $this->redirect(['action' => 'index']);
             }
             $this->Flash->error(__('The user could not be saved. Please, try again.'));
@@ -123,6 +129,23 @@ class UsersController extends AppController
         ]);
         $title = "Profile: ".$user->username;
         $this->set(compact('user','title'));
-
+    }
+    public function resend($id = null)
+    {
+        $user = $this->Users->get($id);
+        $confirmation_key = uniqid();
+        $user->confirmation_key = $confirmation_key;
+        if($this->Users->save($user))
+        {
+            $url = Router::Url(['controller' => 'users', 'action' => 'confirm','prefix'=>false,'plugin'=>false], true) . '/' . $confirmation_key;
+            $this->sendActivationEmail($url, $user);
+            $this->Flash->success(__('Activation mail has been successfully.'));
+        }
+        else
+        {
+            $this->Flash->error(__("Activation mail coludn't be sent. Please try again later"));
+        }
+        return $this->redirect(['action' => 'index']);
+       
     }
 }

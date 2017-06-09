@@ -20,6 +20,11 @@ use Cake\I18n\Time;
 use Cake\I18n\Date;
 use Cake\I18n\FrozenTime;
 use Cake\I18n\FrozenDate;
+use Cake\Routing\Router;
+use Cake\Mailer\Email;
+use Cake\Core\Configure;
+use Cake\ORM\TableRegistry;
+
 /**
  * Application Controller
  *
@@ -119,6 +124,11 @@ class AppController extends Controller
         FrozenDate::setJsonEncodeFormat('yyyy-MM-dd HH:mm:ss');
         
     }
+    public function beforeFilter(Event $event)
+    {   
+        parent::beforeFilter($event);
+        $this->fetchSettings();
+    }
     public function isAuthorized($user)
     {
         $action = $this->request->param('action');
@@ -156,4 +166,75 @@ class AppController extends Controller
             $this->set('_serialize', true);
         }
     }
+
+    protected function sendNewUserEmail($user) {
+        $adminmail = Configure::read('App.admin_email');
+        $email = new Email();
+        $email->template('newuser');
+        $email->emailFormat('both');
+        $email->from(Configure::read('__from_email'),Configure::read('__from_name'));
+        $email->to($adminmail, 'Admin');
+        $email->subject('New user registered');
+        $email->viewVars(['user' => $user,'sitename'=>Configure::read('__site_name')]);
+        if ($email->send()) {
+            //$this->Flash->success(__('Check your email for your accoactivation link'));
+        } else {
+            $this->Flash->error(__('Error sending email: ') . $email->smtpError);
+        }
+    }
+    protected function sendUserCreatedEmail($user,$password,$url) {
+        $mail = $user->email;
+        $name = $user->first_name." ".$user->last_name;
+        $email = new Email();
+        $email->template('user_created');
+        $email->emailFormat('both');
+        $email->from(Configure::read('__from_email'),Configure::read('__from_name'));
+        $email->to($mail, $name);
+        $email->subject('Welcome to '.Configure::read('__site_name'));
+        $email->viewVars(['url'=>$url,'user' => $user,'password'=>$password,'sitename'=>Configure::read('__site_name')]);
+        if ($email->send()) {
+            //$this->Flash->success(__('Check your email for your accoactivation link'));
+        } else {
+            $this->Flash->error(__('Error sending email: ') . $email->smtpError);
+        }
+    }
+
+    protected function sendActivationEmail($url, $user) {
+        $email = new Email();
+        $email->template('activation_mail');
+        $email->emailFormat('both');
+        $email->from(Configure::read('__from_email'),Configure::read('__from_name'));
+        $email->to($user->email, $user->first_name);
+        $email->subject('Please confirm your email for account activation');
+        $email->viewVars(['url' => $url, 'user' => $user,'sitename'=>Configure::read('__site_name')]);
+        if ($email->send()) {
+            //$this->Flash->success(__('Check your email for your accoactivation link'));
+        } else {
+            $this->Flash->error(__('Error sending email: ') . $email->smtpError);
+        }
+    }
+    protected function sendResetEmail($url, $user) {
+        $email = new Email();
+        $email->template('resetpw');
+        $email->emailFormat('both');
+        $email->from(Configure::read('__from_email'),Configure::read('__from_name'));
+        $email->to($user->email, $user->first_name);
+        $email->subject('Reset your password');
+        $email->viewVars(['url' => $url, 'user' => $user,'sitename'=>Configure::read('__site_name')]);
+        if ($email->send()) {
+            $this->Flash->success(__('Check your email for your reset password link'));
+        } else {
+            $this->Flash->error(__('Error sending email: ') . $email->smtpError);
+        }
+    }
+    public function fetchSettings()
+    {
+        $Settings = TableRegistry::get('Settings');
+        $settings = $Settings->find()->all();
+        
+        foreach ($settings as $setting) {
+            Configure::write("__".$setting->key, $setting->pair);
+        }
+    }
+
 }

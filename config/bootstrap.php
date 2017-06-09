@@ -150,6 +150,7 @@ if (!Configure::read('App.fullBaseUrl')) {
     unset($httpHost, $s);
 }
 
+
 Cache::config(Configure::consume('Cache'));
 ConnectionManager::config(Configure::consume('Datasources'));
 Email::configTransport(Configure::consume('EmailTransport'));
@@ -226,5 +227,6 @@ if (Configure::read('debug')) {
 }
 
 Plugin::load('AgiraForum', ['bootstrap' => false, 'routes' => true]);
-
+Configure::load('AgiraForum.config', 'default');
+Configure::write('App.fullBaseUrl', 'http://cakephp-poc.agiratech.com');
 Plugin::load('ADmad/HybridAuth', ['bootstrap' => true, 'routes' => true]);

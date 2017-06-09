@@ -22,6 +22,21 @@
                 </fieldset>
             <?= $this->Form->end() ?>
             <br>
+            <div class="clearfix">
+            <?php 
+            echo $this->Html->link(
+                'Lost password?',
+                ['controller' => 'Users', 'action' => 'password', ],['escape'=>false,'class'=>'text-muted']
+            );
+            ?>
+            <?php 
+            echo $this->Html->link(
+                'Register',
+                ['controller' => 'Users', 'action' => 'register', ],['escape'=>false,'class'=>'text-muted pull-right']
+            );
+            ?>
+            </div>
+            <br>
             <h4 class="text-center">OR</h4>
             <div class="social-buttons">
             <span>Login via </span>

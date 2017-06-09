@@ -35,6 +35,9 @@
                     <?= $this->Html->link('<i class="fa fa-fw fa-pencil"></i> ', ['action' => 'edit', $user->id],['escape'=>false]) ?>
                     <?php if($loguser['id'] != $user->id): ?>
                     <?= $this->Form->postLink('<i class="fa fa-fw fa-remove"></i> ', ['action' => 'delete', $user->id], ['confirm' => __('Are you sure you want to delete # {0}?', $user->username),'escape'=>false]) ?>
+                        <?php if( $user->confirmed != 1): ?>
+                            <?= $this->Html->link('<i class="fa fa-fw fa-envelope"></i> ', ['action' => 'resend', $user->id],['escape'=>false,'title'=>'Send activation mail.']) ?>
+                        <?php endif; ?>
                     <?php endif; ?>
                 </td>
             </tr>

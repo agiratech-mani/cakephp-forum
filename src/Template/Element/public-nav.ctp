@@ -17,16 +17,19 @@
                         $loguser = $this->request->session()->read('Auth.User');
                     ?> 
                     <?php if(empty($loguser)): ?>
-                    <li>
-                        <?= $this->Html->link('<i class="fa fa-fw fa-power-off"></i> '.__('Sign Up'), ['controller' => 'Users', 'action' => 'register','prefix'=>false,'plugin'=>false],['escape' => false]) ?>
+                     <li>
+                        <?= $this->Html->link(__('Forum'), ['controller' => 'ForumForums', 'action' => 'index','prefix'=>false,'plugin'=>'AgiraForum'],['escape' => false]) ?>
                     </li>
                     <li>
-                        <?= $this->Html->link('<i class="fa fa-fw fa-power-off"></i> '.__('Log In'), ['controller' => 'Users', 'action' => 'login','prefix'=>false,'plugin'=>false],['escape' => false]) ?>
+                        <?= $this->Html->link('<i class="fa fa-fw fa-user"></i> '.__('Sign Up'), ['controller' => 'Users', 'action' => 'register','prefix'=>false,'plugin'=>false],['escape' => false]) ?>
+                    </li>
+                    <li>
+                        <?= $this->Html->link('<i class="fa fa-fw fa-sign-in"></i> '.__('Log In'), ['controller' => 'Users', 'action' => 'login','prefix'=>false,'plugin'=>false],['escape' => false]) ?>
                     </li>
                    
                     <?php else: ?>
                     <?php if($authUser['role'] == 'admin'){ ?>
-                   
+                    <li>
                         <?= $this->Html->link(__('Admin Panel'), ['controller' => 'Users', 'action' => 'index','prefix'=>'admin'],['escape' => false]) ?>
                     </li>
                     <?php } else if($authUser['role'] == 'moderator'){  ?>
@@ -55,7 +58,7 @@
                             </li>
                             <li class="divider"></li>
                             <li>
-                                <?= $this->Html->link('<i class="fa fa-fw fa-power-off"></i> '.__('Log Out'), ['controller' => 'Users', 'action' => 'logout','prefix'=>false,'plugin'=>false],['escape' => false]) ?>
+                                <?= $this->Html->link('<i class="fa fa-fw fa-sign-out"></i> '.__('Log Out'), ['controller' => 'Users', 'action' => 'logout','prefix'=>false,'plugin'=>false],['escape' => false]) ?>
                             </li>
                         </ul>
                     </li>

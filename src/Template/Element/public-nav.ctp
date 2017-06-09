@@ -30,12 +30,12 @@
                     <?php else: ?>
                     <?php if($authUser['role'] == 'admin'){ ?>
                     <li>
-                        <?= $this->Html->link(__('Admin Panel'), ['controller' => 'Users', 'action' => 'index','prefix'=>'admin'],['escape' => false]) ?>
+                        <?= $this->Html->link(__('Admin Panel'), ['controller' => 'Users', 'action' => 'index','prefix'=>'admin','plugin'=>false],['escape' => false]) ?>
                     </li>
                     <?php } else if($authUser['role'] == 'moderator'){  ?>
                      <li>
                         <?= $this->Html->link(__('Admin Panel'), ['controller' 
-                        => 'ForumForums', 'action' => 'index','prefix'=>'admin','plugin'=>'AgiraForum'],['escape' => false]) ?>
+                        => 'ForumForums', 'action' => 'index','prefix'=>'admin','plugin'=>false],['escape' => false]) ?>
                     </li>
                     <?php } ?>
                     <li>

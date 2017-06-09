@@ -24,7 +24,7 @@
             ?>
                 <tr>
                     <td><?= $this->Html->link($forumForum->title, ['controller' => 'ForumForums', 'action' => 'view', $forumForum->slug]) ?></td>
-                    <td><?= $this->Html->link($forumForum->forum_topic->name, ['controller' => 'ForumForums', 'action' => 'index', $forumForum->forum_topic->slug]) ?></td>
+                    <td><?= $forumForum->forum_topic->name ?></td>
                     <td>
                         <?php
                             if($forumForum->status == 1)
